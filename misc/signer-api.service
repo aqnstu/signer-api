@@ -1,0 +1,16 @@
+[Unit]
+Description=Signer API Uvicorn (py36)
+After=network.target
+
+[Service]
+User=api
+Group=api
+
+WorkingDirectory=/home/api/signer-api
+Environment="LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/oracle/11.2/client64/lib"
+Environment="PATH=$PATH:/home/api/signer-api/env/bin"
+ExecStart=/home/api/signer-api/env/bin/uvicorn --workers 4 --host 0.0.0.0 --port 8001 apiapp:app
+#--access-log /var/log/apps/signer-api-access.log --error-log /var/log/apps/signer-api-error.log apiapp:app
+
+[Install]
+WantedBy=multi-user.target
