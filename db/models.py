@@ -21,12 +21,12 @@ t_ss_admissionvolume = Table(
     metadata,
     Column(
         "UID",
-        NUMBER(asdecimal=False),
+        NUMBER(asdecimal=True),
         comment="Уникальный идентификатор записи КЦП ООВО",
     ),
     Column(
         "UIDCampaign",
-        NUMBER(asdecimal=False),
+        NUMBER(asdecimal=True),
         comment="Уникальный идентификатор приемной кампании ООВО",
     ),
     Column(
@@ -36,49 +36,49 @@ t_ss_admissionvolume = Table(
     ),
     Column(
         "IDEducationLevel",
-        NUMBER(asdecimal=False),
+        NUMBER(asdecimal=True),
         comment="Идентификатор уровня образования – содержит ссылку на id справочника educationLevel",
     ),
     Column("name", VARCHAR(1000), comment="Имя по ОКСО (не используется в выгрузке)"),
     Column(
-        "Budget_o", NUMBER(asdecimal=False), comment="Значение в разрезе бюджет/очно"
+        "Budget_o", NUMBER(asdecimal=True), comment="Значение в разрезе бюджет/очно"
     ),
     Column(
         "Budget_oz",
-        NUMBER(asdecimal=False),
+        NUMBER(asdecimal=True),
         comment="Значение в разрезе бюджет/очно-заочно",
     ),
     Column(
-        "Budget_z", NUMBER(asdecimal=False), comment="Значение в разрезе бюджет/заочно"
+        "Budget_z", NUMBER(asdecimal=True), comment="Значение в разрезе бюджет/заочно"
     ),
-    Column("Quota_o", NUMBER(asdecimal=False), comment="Значение в разрезе квота/очно"),
+    Column("Quota_o", NUMBER(asdecimal=True), comment="Значение в разрезе квота/очно"),
     Column(
         "Quota_oz",
-        NUMBER(asdecimal=False),
+        NUMBER(asdecimal=True),
         comment="Значение в разрезе квота/очно-заочно",
     ),
     Column(
-        "Quota_z", NUMBER(asdecimal=False), comment="Значение в разрезе квота/заочно"
+        "Quota_z", NUMBER(asdecimal=True), comment="Значение в разрезе квота/заочно"
     ),
-    Column("Paid_o", NUMBER(asdecimal=False), comment="Значение в разрезе платно/очно"),
+    Column("Paid_o", NUMBER(asdecimal=True), comment="Значение в разрезе платно/очно"),
     Column(
         "Paid_oz",
-        NUMBER(asdecimal=False),
+        NUMBER(asdecimal=True),
         comment="Значение в разрезе платно/очно-заочно",
     ),
     Column(
-        "Paid_z", NUMBER(asdecimal=False), comment="Значение в разрезе платно/заочно"
+        "Paid_z", NUMBER(asdecimal=True), comment="Значение в разрезе платно/заочно"
     ),
     Column(
-        "Target_o", NUMBER(asdecimal=False), comment="Значение в разрезе целевое/очно"
+        "Target_o", NUMBER(asdecimal=True), comment="Значение в разрезе целевое/очно"
     ),
     Column(
         "Target_oz",
-        NUMBER(asdecimal=False),
+        NUMBER(asdecimal=True),
         comment="Значение в разрезе целевое/очно-заочно",
     ),
     Column(
-        "Target_z", NUMBER(asdecimal=False), comment="Значение в разрезе целевое/заочно"
+        "Target_z", NUMBER(asdecimal=True), comment="Значение в разрезе целевое/заочно"
     ),
     comment="Контрольные цифры приема ",
 )
@@ -116,18 +116,18 @@ class SsBenefit(Base):
 t_ss_campaign = Table(
     "ss_campaign",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
     Column("Name", VARCHAR(276)),
-    Column("YearStart", NUMBER(asdecimal=False)),
-    Column("YearEnd", NUMBER(asdecimal=False)),
-    Column("IDEducationForm1", NUMBER(asdecimal=False)),
-    Column("IDEducationForm2", NUMBER(asdecimal=False)),
-    Column("IDEducationLevel1", NUMBER(asdecimal=False)),
-    Column("IDEducationLevel2", NUMBER(asdecimal=False)),
-    Column("IDCampaignType", NUMBER(asdecimal=False)),
-    Column("IDCampaignStatus", NUMBER(asdecimal=False)),
-    Column("NumberAgree", NUMBER(asdecimal=False)),
-    Column("CountDirections", NUMBER(asdecimal=False)),
+    Column("YearStart", NUMBER(asdecimal=True)),
+    Column("YearEnd", NUMBER(asdecimal=True)),
+    Column("IDEducationForm1", NUMBER(asdecimal=True)),
+    Column("IDEducationForm2", NUMBER(asdecimal=True)),
+    Column("IDEducationLevel1", NUMBER(asdecimal=True)),
+    Column("IDEducationLevel2", NUMBER(asdecimal=True)),
+    Column("IDCampaignType", NUMBER(asdecimal=True)),
+    Column("IDCampaignStatus", NUMBER(asdecimal=True)),
+    Column("NumberAgree", NUMBER(asdecimal=True)),
+    Column("CountDirections", NUMBER(asdecimal=True)),
     Column("EndDate", VARCHAR(26)),
 )
 
@@ -188,15 +188,15 @@ class SsCompatriotcategory(Base):
 t_ss_competitivegroup = Table(
     "ss_competitivegroup",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
-    Column("UIDCampaign", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
+    Column("UIDCampaign", NUMBER(asdecimal=True)),
     Column("Name", VARCHAR(786)),
-    Column("IDLevelBudget", NUMBER(asdecimal=False)),
-    Column("IDEducationLevel", NUMBER(asdecimal=False)),
-    Column("IDEducationSource", NUMBER(asdecimal=False)),
-    Column("IDEducationForm", NUMBER(asdecimal=False)),
+    Column("IDLevelBudget", NUMBER(asdecimal=True)),
+    Column("IDEducationLevel", NUMBER(asdecimal=True)),
+    Column("IDEducationSource", NUMBER(asdecimal=True)),
+    Column("IDEducationForm", NUMBER(asdecimal=True)),
     Column("idocso", Integer),
-    Column("AdmissionNumber", NUMBER(asdecimal=False)),
+    Column("AdmissionNumber", NUMBER(asdecimal=True)),
     Column("Comment", CHAR(1)),
 )
 
@@ -551,9 +551,9 @@ class SsReturntype(Base):
 t_ss_sogl = Table(
     "ss_sogl",
     metadata,
-    Column("uid_epgu", NUMBER(asdecimal=False)),
-    Column("sogl", NUMBER(asdecimal=False)),
-    Column("otzyv", NUMBER(asdecimal=False)),
+    Column("uid_epgu", NUMBER(asdecimal=True)),
+    Column("sogl", NUMBER(asdecimal=True)),
+    Column("otzyv", NUMBER(asdecimal=True)),
     Column("comp", VARCHAR(1000)),
     Column("date_sogl", DateTime),
     Column("date_otzv", DateTime),
@@ -614,7 +614,7 @@ t_ss_test = Table(
     metadata,
     Column("snils", VARCHAR(1000)),
     Column("q", VARCHAR(1000)),
-    Column("sex", NUMBER(asdecimal=False)),
+    Column("sex", NUMBER(asdecimal=True)),
     Column("f", VARCHAR(1000)),
     Column("n", VARCHAR(1000)),
     Column("p", VARCHAR(1000)),
@@ -635,10 +635,10 @@ t_ss_test = Table(
     Column("accept_date", VARCHAR(1000)),
     Column("id_app_status", VARCHAR(1000)),
     Column("comp", VARCHAR(1000)),
-    Column("app_number", NUMBER(asdecimal=False)),
+    Column("app_number", NUMBER(asdecimal=True)),
     Column("date_load", DateTime),
-    Column("fk_abit_card", NUMBER(asdecimal=False)),
-    Column("need_hostel", NUMBER(asdecimal=False)),
+    Column("fk_abit_card", NUMBER(asdecimal=True)),
+    Column("need_hostel", NUMBER(asdecimal=True)),
     Column("nh", VARCHAR(1000)),
 )
 
@@ -646,12 +646,12 @@ t_ss_test = Table(
 t_ss_try = Table(
     "ss_try",
     metadata,
-    Column("q", NUMBER(asdecimal=False)),
-    Column("w", NUMBER(asdecimal=False)),
-    Column("e", NUMBER(asdecimal=False)),
-    Column("r", NUMBER(asdecimal=False)),
-    Column("t", NUMBER(asdecimal=False)),
-    Column("y", NUMBER(asdecimal=False)),
+    Column("q", NUMBER(asdecimal=True)),
+    Column("w", NUMBER(asdecimal=True)),
+    Column("e", NUMBER(asdecimal=True)),
+    Column("r", NUMBER(asdecimal=True)),
+    Column("t", NUMBER(asdecimal=True)),
+    Column("y", NUMBER(asdecimal=True)),
 )
 
 
@@ -676,41 +676,41 @@ class SsViolationtype(Base):
 t_vw_ss_admissionvolume_2021 = Table(
     "vw$ss_admissionvolume_2021",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
-    Column("UIDCampaign", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
+    Column("UIDCampaign", NUMBER(asdecimal=True)),
     Column("IDDirection", Integer, nullable=False),
-    Column("IDEducationLevel", NUMBER(asdecimal=False)),
+    Column("IDEducationLevel", NUMBER(asdecimal=True)),
     Column("name", VARCHAR(1000)),
-    Column("Budget_o", NUMBER(asdecimal=False)),
-    Column("Budget_oz", NUMBER(asdecimal=False)),
-    Column("Budget_z", NUMBER(asdecimal=False)),
-    Column("Quota_o", NUMBER(asdecimal=False)),
-    Column("Quota_oz", NUMBER(asdecimal=False)),
-    Column("Quota_z", NUMBER(asdecimal=False)),
-    Column("Paid_o", NUMBER(asdecimal=False)),
-    Column("Paid_oz", NUMBER(asdecimal=False)),
-    Column("Paid_z", NUMBER(asdecimal=False)),
-    Column("Target_o", NUMBER(asdecimal=False)),
-    Column("Target_oz", NUMBER(asdecimal=False)),
-    Column("Target_z", NUMBER(asdecimal=False)),
+    Column("Budget_o", NUMBER(asdecimal=True)),
+    Column("Budget_oz", NUMBER(asdecimal=True)),
+    Column("Budget_z", NUMBER(asdecimal=True)),
+    Column("Quota_o", NUMBER(asdecimal=True)),
+    Column("Quota_oz", NUMBER(asdecimal=True)),
+    Column("Quota_z", NUMBER(asdecimal=True)),
+    Column("Paid_o", NUMBER(asdecimal=True)),
+    Column("Paid_oz", NUMBER(asdecimal=True)),
+    Column("Paid_z", NUMBER(asdecimal=True)),
+    Column("Target_o", NUMBER(asdecimal=True)),
+    Column("Target_oz", NUMBER(asdecimal=True)),
+    Column("Target_z", NUMBER(asdecimal=True)),
 )
 
 
 t_vw_ss_campaign_2021 = Table(
     "vw$ss_campaign_2021",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
     Column("Name", VARCHAR(276)),
-    Column("YearStart", NUMBER(asdecimal=False)),
-    Column("YearEnd", NUMBER(asdecimal=False)),
-    Column("IDEducationForm1", NUMBER(asdecimal=False)),
-    Column("IDEducationForm2", NUMBER(asdecimal=False)),
-    Column("IDEducationLevel1", NUMBER(asdecimal=False)),
-    Column("IDEducationLevel2", NUMBER(asdecimal=False)),
-    Column("IDCampaignType", NUMBER(asdecimal=False)),
-    Column("IDCampaignStatus", NUMBER(asdecimal=False)),
-    Column("NumberAgree", NUMBER(asdecimal=False)),
-    Column("CountDirections", NUMBER(asdecimal=False)),
+    Column("YearStart", NUMBER(asdecimal=True)),
+    Column("YearEnd", NUMBER(asdecimal=True)),
+    Column("IDEducationForm1", NUMBER(asdecimal=True)),
+    Column("IDEducationForm2", NUMBER(asdecimal=True)),
+    Column("IDEducationLevel1", NUMBER(asdecimal=True)),
+    Column("IDEducationLevel2", NUMBER(asdecimal=True)),
+    Column("IDCampaignType", NUMBER(asdecimal=True)),
+    Column("IDCampaignStatus", NUMBER(asdecimal=True)),
+    Column("NumberAgree", NUMBER(asdecimal=True)),
+    Column("CountDirections", NUMBER(asdecimal=True)),
     Column("EndDate", VARCHAR(26)),
 )
 
@@ -718,42 +718,42 @@ t_vw_ss_campaign_2021 = Table(
 t_vw_ss_competitivebenefit_2021 = Table(
     "vw$ss_competitivebenefit_2021",
     metadata,
-    Column("UIDCompetitiveGroup", NUMBER(asdecimal=False)),
-    Column("IDBenefit", NUMBER(asdecimal=False)),
-    Column("IDOlympicDiplomaType", NUMBER(asdecimal=False)),
-    Column("EgeMinValue", NUMBER(asdecimal=False)),
-    Column("IDOlympicType", NUMBER(asdecimal=False)),
-    Column("IDOlympicLevels", NUMBER(asdecimal=False)),
+    Column("UIDCompetitiveGroup", NUMBER(asdecimal=True)),
+    Column("IDBenefit", NUMBER(asdecimal=True)),
+    Column("IDOlympicDiplomaType", NUMBER(asdecimal=True)),
+    Column("EgeMinValue", NUMBER(asdecimal=True)),
+    Column("IDOlympicType", NUMBER(asdecimal=True)),
+    Column("IDOlympicLevels", NUMBER(asdecimal=True)),
     Column("OlympicProfiles", VARCHAR(0)),
-    Column("UID", NUMBER(asdecimal=False)),
-    Column("fk_competition", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
+    Column("fk_competition", NUMBER(asdecimal=True)),
 )
 
 
 t_vw_ss_competitivegroup_2021 = Table(
     "vw$ss_competitivegroup_2021",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
-    Column("UIDCampaign", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
+    Column("UIDCampaign", NUMBER(asdecimal=True)),
     Column("Name", VARCHAR(801)),
-    Column("IDLevelBudget", NUMBER(asdecimal=False)),
-    Column("IDEducationLevel", NUMBER(asdecimal=False)),
-    Column("IDEducationSource", NUMBER(asdecimal=False)),
-    Column("IDEducationForm", NUMBER(asdecimal=False)),
+    Column("IDLevelBudget", NUMBER(asdecimal=True)),
+    Column("IDEducationLevel", NUMBER(asdecimal=True)),
+    Column("IDEducationSource", NUMBER(asdecimal=True)),
+    Column("IDEducationForm", NUMBER(asdecimal=True)),
     Column("idocso", Integer),
-    Column("AdmissionNumber", NUMBER(asdecimal=False)),
+    Column("AdmissionNumber", NUMBER(asdecimal=True)),
     Column("Comment", CHAR(1)),
-    Column("fk_competition", NUMBER(asdecimal=False)),
+    Column("fk_competition", NUMBER(asdecimal=True)),
 )
 
 
 t_vw_ss_competitivegrouppr_2021 = Table(
     "vw$ss_competitivegrouppr_2021",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
-    Column("UIDCompetitiveGroup", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
+    Column("UIDCompetitiveGroup", NUMBER(asdecimal=True)),
     Column("UIDSubdivisionOrg", CHAR(1)),
-    Column("UIDEducationProgram", NUMBER(asdecimal=False)),
+    Column("UIDEducationProgram", NUMBER(asdecimal=True)),
     comment="CompetitiveGroupProgram",
 )
 
@@ -761,33 +761,33 @@ t_vw_ss_competitivegrouppr_2021 = Table(
 t_vw_ss_distadmissionvolume_2021 = Table(
     "vw$ss_distadmissionvolume_2021",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
-    Column("UIDAdmissionVolume", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
+    Column("UIDAdmissionVolume", NUMBER(asdecimal=True)),
     Column("IDDirection", Integer, nullable=False),
-    Column("IDLevelBudget", NUMBER(asdecimal=False)),
+    Column("IDLevelBudget", NUMBER(asdecimal=True)),
     Column("name", VARCHAR(1000)),
-    Column("Budget_o", NUMBER(asdecimal=False)),
-    Column("Budget_oz", NUMBER(asdecimal=False)),
-    Column("Budget_z", NUMBER(asdecimal=False)),
-    Column("Quota_o", NUMBER(asdecimal=False)),
-    Column("Quota_oz", NUMBER(asdecimal=False)),
-    Column("Quota_z", NUMBER(asdecimal=False)),
-    Column("Paid_o", NUMBER(asdecimal=False)),
-    Column("Paid_oz", NUMBER(asdecimal=False)),
-    Column("Paid_z", NUMBER(asdecimal=False)),
-    Column("Target_o", NUMBER(asdecimal=False)),
-    Column("Target_oz", NUMBER(asdecimal=False)),
-    Column("Target_z", NUMBER(asdecimal=False)),
+    Column("Budget_o", NUMBER(asdecimal=True)),
+    Column("Budget_oz", NUMBER(asdecimal=True)),
+    Column("Budget_z", NUMBER(asdecimal=True)),
+    Column("Quota_o", NUMBER(asdecimal=True)),
+    Column("Quota_oz", NUMBER(asdecimal=True)),
+    Column("Quota_z", NUMBER(asdecimal=True)),
+    Column("Paid_o", NUMBER(asdecimal=True)),
+    Column("Paid_oz", NUMBER(asdecimal=True)),
+    Column("Paid_z", NUMBER(asdecimal=True)),
+    Column("Target_o", NUMBER(asdecimal=True)),
+    Column("Target_oz", NUMBER(asdecimal=True)),
+    Column("Target_z", NUMBER(asdecimal=True)),
 )
 
 
 t_vw_ss_educationprogram_2021 = Table(
     "vw$ss_educationprogram_2021",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
     Column("Name", VARCHAR(766)),
-    Column("IDEducationForm", NUMBER(asdecimal=False)),
-    Column("fk_competition", NUMBER(asdecimal=False), nullable=False),
+    Column("IDEducationForm", NUMBER(asdecimal=True)),
+    Column("fk_competition", NUMBER(asdecimal=True), nullable=False),
     Column("idocso", Integer, nullable=False),
 )
 
@@ -795,30 +795,30 @@ t_vw_ss_educationprogram_2021 = Table(
 t_vw_ss_entrancetest_2021 = Table(
     "vw$ss_entrancetest_2021",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
-    Column("UIDCompetitiveGroup", NUMBER(asdecimal=False)),
-    Column("fk_competition", NUMBER(asdecimal=False)),
-    Column("IDEntranceTestType", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
+    Column("UIDCompetitiveGroup", NUMBER(asdecimal=True)),
+    Column("fk_competition", NUMBER(asdecimal=True)),
+    Column("IDEntranceTestType", NUMBER(asdecimal=True)),
     Column("TestName", VARCHAR(768)),
-    Column("IsEge", NUMBER(asdecimal=False)),
-    Column("MinScore", NUMBER(asdecimal=False)),
-    Column("Priority", NUMBER(asdecimal=False)),
+    Column("IsEge", NUMBER(asdecimal=True)),
+    Column("MinScore", NUMBER(asdecimal=True)),
+    Column("Priority", NUMBER(asdecimal=True)),
     Column("IDSubject", Integer),
-    Column("UIDReplaceEntranceTest", NUMBER(asdecimal=False)),
+    Column("UIDReplaceEntranceTest", NUMBER(asdecimal=True)),
 )
 
 
 t_vw_ss_entrancetestbenefit_2021 = Table(
     "vw$ss_entrancetestbenefit_2021",
     metadata,
-    Column("UIDEntranceTest", NUMBER(asdecimal=False)),
-    Column("UID", NUMBER(asdecimal=False)),
-    Column("IDBenefit", NUMBER(asdecimal=False)),
-    Column("IDOlympicDiplomaType", NUMBER(asdecimal=False)),
+    Column("UIDEntranceTest", NUMBER(asdecimal=True)),
+    Column("UID", NUMBER(asdecimal=True)),
+    Column("IDBenefit", NUMBER(asdecimal=True)),
+    Column("IDOlympicDiplomaType", NUMBER(asdecimal=True)),
     Column("OlympicClasses", VARCHAR(0)),
-    Column("IDOlympicLevel", NUMBER(asdecimal=False)),
-    Column("OlympicProfiles", Integer, nullable=False),
-    Column("EgeMinValue", NUMBER(asdecimal=False)),
+    Column("IDOlympicLevel", NUMBER(asdecimal=True)),
+    Column("OlympicProfiles", Integer, nullable=True),
+    Column("EgeMinValue", NUMBER(asdecimal=True)),
     Column("subject_name", VARCHAR(200)),
 )
 
@@ -826,18 +826,18 @@ t_vw_ss_entrancetestbenefit_2021 = Table(
 t_vw_ss_entrancetestloc_2021 = Table(
     "vw$ss_entrancetestloc_2021",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
-    Column("UIDEntranceTest", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
+    Column("UIDEntranceTest", NUMBER(asdecimal=True)),
     Column("TestDate", VARCHAR(24)),
     Column("TestLocation", CHAR(14)),
-    Column("EntrantsCount", NUMBER(asdecimal=False)),
+    Column("EntrantsCount", NUMBER(asdecimal=True)),
 )
 
 
 t_vw_ss_subdivisionorg_2021 = Table(
     "vw$ss_subdivisionorg_2021",
     metadata,
-    Column("UID", NUMBER(asdecimal=False)),
+    Column("UID", NUMBER(asdecimal=True)),
     Column("Name", VARCHAR(256)),
 )
 
@@ -845,11 +845,11 @@ t_vw_ss_subdivisionorg_2021 = Table(
 t_vw_ss_termsadmission_2021_189 = Table(
     "vw$ss_termsadmission_2021_189",
     metadata,
-    Column("UIDCampaign", NUMBER(asdecimal=False)),
-    Column("UID", NUMBER(asdecimal=False)),
+    Column("UIDCampaign", NUMBER(asdecimal=True)),
+    Column("UID", NUMBER(asdecimal=True)),
     Column("Name", CHAR(10)),
-    Column("IDTermsLsf", NUMBER(asdecimal=False)),
-    Column("IDStage", NUMBER(asdecimal=False)),
+    Column("IDTermsLsf", NUMBER(asdecimal=True)),
+    Column("IDStage", NUMBER(asdecimal=True)),
     Column("StartEvent", VARCHAR(26)),
     Column("EndEvent", VARCHAR(26)),
 )
