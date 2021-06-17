@@ -129,9 +129,11 @@ def read_competitive_benefit(
 
 @app.get("/api/db/get-entrance-test")
 def read_entrance_test(
-    skip: int = 0, limit: int = 1000, db: Session = Depends(get_db)
+    skip: int = 0, limit: int = 1000, stage: int = 1, db: Session = Depends(get_db)
 ):
-    data = crud.get_entrance_test(db, skip=skip, limit=limit)
+    if stage not in (1, 2, 3):
+        raise HTTPException(status_code=400, detail="You should use a stage value of 1, 2 or 3")
+    data = crud.get_entrance_test(db, skip=skip, limit=limit, stage=stage)
     return data
 
 
