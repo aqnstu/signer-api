@@ -885,11 +885,11 @@ class SsStatusesTo(Base):
     __tablename__ = 'ss_statuses_to'
     __table_args__ = {'schema': 'abituser'}
 
-    pk = Column(NUMBER(asdecimal=False), primary_key=True)
+    pk = Column(NUMBER(asdecimal=True), primary_key=True)
     epgu_id = Column(VARCHAR(128), nullable=False, comment='id на ЕПГУ')
     id_ss_applicationstatuses = Column(ForeignKey('abituser.ss_applicationstatuses.id'), nullable=False, comment='статус')
     date_add = Column(DateTime, nullable=False, server_default=text("sysdate "), comment='дата добавления в очередь')
-    is_processed = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0 "), comment='обработан ли, при ошибке -1')
+    is_processed = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0 "), comment='обработан ли, при ошибке -1')
     date_process = Column(DateTime, comment='дата обработки')
     err_msg = Column(VARCHAR(4000), comment='сообщение об ошибке')
 

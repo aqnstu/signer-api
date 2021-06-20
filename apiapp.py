@@ -2,12 +2,13 @@
 from fastapi import Depends, FastAPI, HTTPException, Body
 from sqlalchemy.orm import Session
 import logging.config
+
 # import uvicorn
 
 from db import crud, models, schemas
 from db.database import SessionLocal, engine
 from logger import CustomizeLogger
-from model import Document, String, Application, EpguDocument
+from model import Document, String, Application, EpguDocument, Status
 from signer import get_jwt, to_base64_string
 
 
@@ -32,7 +33,9 @@ def get_db():
 
 @app.get("/")
 def read_root():
-    return {"message": "API для подписи и получения данных для работы с суперсервисом [Поступи онлайн]"}
+    return {
+        "message": "API для подписи и получения данных для работы с суперсервисом [Поступи онлайн]"
+    }
 
 
 @app.post("/api/utils/create-base64")
@@ -72,9 +75,7 @@ def read_education_program(
 
 
 @app.get("/api/db/get-campaign")
-def read_campaign(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_campaign(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     data = crud.get_campaign(db, skip=skip, limit=limit)
     return data
 
@@ -132,7 +133,9 @@ def read_entrance_test(
     skip: int = 0, limit: int = 1000, stage: int = 1, db: Session = Depends(get_db)
 ):
     if stage not in (1, 2, 3):
-        raise HTTPException(status_code=400, detail="You should use a stage value of 1, 2 or 3")
+        raise HTTPException(
+            status_code=400, detail="You should use a stage value of 1, 2 or 3"
+        )
     data = crud.get_entrance_test(db, skip=skip, limit=limit, stage=stage)
     return data
 
@@ -162,7 +165,7 @@ def read_terms_admission(
 
 
 @app.get("/api/db/get-epgu-application")
-def read_terms_admission(
+def read_epgu_application(
     skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ):
     data = crud.get_epgu_application(db, skip=skip, limit=limit)
@@ -170,8 +173,13 @@ def read_terms_admission(
 
 
 @app.post("/api/db/insert-into-epgu-application")
-def create_record_for_user(app: Application, db: Session = Depends(get_db)):
-    return crud.insert_into_epgu_application(db=db, user_guid=app.user_guid, json_data=app.json_data, id_datatype=app.id_datatype)
+def create_record_epgu_application(app: Application, db: Session = Depends(get_db)):
+    return crud.insert_into_epgu_application(
+        db=db,
+        user_guid=app.user_guid,
+        json_data=app.json_data,
+        id_datatype=app.id_datatype,
+    )
 
 
 @app.get("/api/db/get-statuses-to")
@@ -180,8 +188,26 @@ def read_statuses_to(skip: int = 0, limit: int = 100, db: Session = Depends(get_
     return data
 
 
-@app.post("/api/db/insert-into-epgu-document")
-def read_statuses_to(doc: EpguDocument, db: Session = Depends(get_db)):
-    data = crud.insert_into_epgu_document(db, user_guid=doc.user_guid, json_data=doc.json_data, id_documenttype=doc.id_documenttype)
+@app.post("/api/db/update-statuses-to")
+def update_record_statuses_to(stat: Status, db: Session = Depends(get_db)):
+    data = crud.update_into_statuses_to(
+        db, pk=stat.pk, is_processed=stat.is_processed, err_msg=stat.err_msg
+    )
+    return {'status': 'OK'}
+
+
+@app.get("/api/db/get-epgu-document")
+def read_epgu_document(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    data = crud.get_epgu_document(db, skip=skip, limit=limit)
     return data
 
+
+@app.post("/api/db/insert-into-epgu-document")
+def create_record_epgu_document(doc: EpguDocument, db: Session = Depends(get_db)):
+    data = crud.insert_into_epgu_document(
+        db,
+        user_guid=doc.user_guid,
+        json_data=doc.json_data,
+        id_documenttype=doc.id_documenttype,
+    )
+    return data

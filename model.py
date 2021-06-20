@@ -23,3 +23,8 @@ class EpguDocument(BaseModel):
     json_data: str
     id_documenttype: int
     
+class Status(BaseModel):
+    pk: int
+    is_processed: int
+    err_msg: str
+    

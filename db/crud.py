@@ -100,40 +100,56 @@ def get_entrance_test_location(db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_terms_admission(db: Session, skip: int = 0, limit: int = 100):
-    return (
-        db.query(models.t_ss_termsadmission).offset(skip).limit(limit).all()
-    )
+    return db.query(models.t_ss_termsadmission).offset(skip).limit(limit).all()
 
 
 def get_epgu_application(db: Session, skip: int = 0, limit: int = 100):
-    return (
-        db.query(models.SsEpguapplication).offset(skip).limit(limit).all()
-    )
+    return db.query(models.SsEpguapplication).offset(skip).limit(limit).all()
 
 
-def insert_into_epgu_application(db: Session, user_guid: str, json_data: str, id_datatype: int):
+def insert_into_epgu_application(
+    db: Session, user_guid: str, json_data: str, id_datatype: int
+):
     row = models.SsEpguapplication(
-        epgu_id=user_guid,
-        json=json_data,
-        id_ss_entity_type=id_datatype
+        epgu_id=user_guid, json=json_data, id_ss_entity_type=id_datatype
     )
     db.add(row)
     db.commit()
     db.refresh(row)
     return row
-    
+
 
 def get_statuses_to(db: Session, skip: int = 0, limit: int = 100):
     return (
-        db.query(models.SsStatusesTo).offset(skip).limit(limit).all()
+        db.query(models.SsStatusesTo)
+        .filter(models.SsStatusesTo.is_processed == 0)
+        .offset(skip)
+        .limit(limit)
+        .all()
     )
-    
-    
-def insert_into_epgu_document(db: Session, user_guid: str, json_data: str, id_documenttype: int):
+
+
+def update_into_statuses_to(
+    db: Session, pk: int, is_processed: int, err_msg: str = None
+):
+    db.query(models.SsStatusesTo).filter(models.SsStatusesTo.pk == pk).update(
+        {
+            models.SsStatusesTo.is_processed: is_processed,
+            models.SsStatusesTo.err_msg: err_msg,
+        }
+    )
+    db.commit()
+
+
+def get_epgu_document(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.SsEpgudocument).offset(skip).limit(limit).all()
+
+
+def insert_into_epgu_document(
+    db: Session, user_guid: str, json_data: str, id_documenttype: int
+):
     row = models.SsEpgudocument(
-        epgu_id=user_guid,
-        json=json_data,
-        id_ss_documenttype=id_documenttype
+        epgu_id=user_guid, json=json_data, id_ss_documenttype=id_documenttype
     )
     db.add(row)
     db.commit()
