@@ -1,5 +1,6 @@
 # coding: utf-8
-from sqlalchemy import CHAR, Column, DateTime, Integer, Table, Text, VARCHAR
+from sqlalchemy import CHAR, Column, DateTime, Integer, Table, Text, VARCHAR, text, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.oracle import NUMBER
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -91,16 +92,6 @@ class SsAppealstatus(Base):
     id = Column(Integer, primary_key=True)
     actual = Column(Integer)
     name = Column(VARCHAR(50))
-
-
-class SsApplicationstatus(Base):
-    __tablename__ = "ss_applicationstatuses"
-    __table_args__ = {"comment": "Статусы заявлений"}
-
-    id = Column(Integer, primary_key=True)
-    actual = Column(Integer)
-    code = Column(VARCHAR(100))
-    name = Column(VARCHAR(200))
 
 
 class SsBenefit(Base):
@@ -853,3 +844,64 @@ t_vw_ss_termsadmission_2021_189 = Table(
     Column("StartEvent", VARCHAR(26)),
     Column("EndEvent", VARCHAR(26)),
 )
+
+
+t_ss_termsadmission = Table(
+    'ss_termsadmission', metadata,
+    Column('UIDCampaign', NUMBER(asdecimal=True)),
+    Column('UID', NUMBER(asdecimal=True)),
+    Column('Name', VARCHAR(500)),
+    Column('IDTermsLfs', NUMBER(asdecimal=True)),
+    Column('IDStage', NUMBER(asdecimal=True)),
+    Column('StartEvent', VARCHAR(26)),
+    Column('EndEvent', VARCHAR(26))
+)
+
+
+class SsApplicationstatus(Base):
+    __tablename__ = 'ss_applicationstatuses'
+    __table_args__ = {'schema': 'abituser', 'comment': 'Статусы заявлений'}
+
+    id = Column(Integer, primary_key=True)
+    actual = Column(Integer)
+    code = Column(VARCHAR(100))
+    name = Column(VARCHAR(200))
+
+
+class SsEntityType(Base):
+    __tablename__ = 'ss_entity_type'
+    __table_args__ = {'schema': 'abituser'}
+
+    id = Column(NUMBER(asdecimal=False), primary_key=True)
+    name = Column(VARCHAR(512), nullable=False)
+
+
+class SsEpguapplication(Base):
+    __tablename__ = 'ss_epguapplication'
+    __table_args__ = {'schema': 'abituser'}
+
+    pk = Column(NUMBER(asdecimal=False), primary_key=True)
+    epgu_id = Column(VARCHAR(128), nullable=False)
+    json = Column(Text)
+    date_add = Column(DateTime, nullable=False, server_default=text("sysdate "))
+    is_accepted = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0 "))
+    date_accept = Column(DateTime)
+    remark = Column(VARCHAR(4000))
+    id_ss_entity_type = Column(ForeignKey('abituser.ss_entity_type.id'), nullable=False)
+
+    ss_entity_type = relationship('SsEntityType')
+
+
+class SsStatusesTo(Base):
+    __tablename__ = 'ss_statuses_to'
+    __table_args__ = {'schema': 'abituser'}
+
+    pk = Column(NUMBER(asdecimal=False), primary_key=True)
+    epgu_id = Column(VARCHAR(128), nullable=False, comment='id на ЕПГУ')
+    id_ss_applicationstatuses = Column(ForeignKey('abituser.ss_applicationstatuses.id'), nullable=False, comment='статус')
+    date_add = Column(DateTime, nullable=False, server_default=text("sysdate "), comment='дата добавления в очередь')
+    is_processed = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0 "), comment='обработан ли, при ошибке -1')
+    date_process = Column(DateTime, comment='дата обработки')
+    err_msg = Column(VARCHAR(4000), comment='сообщение об ошибке')
+
+    ss_applicationstatus = relationship('SsApplicationstatus')

@@ -101,5 +101,29 @@ def get_entrance_test_location(db: Session, skip: int = 0, limit: int = 100):
 
 def get_terms_admission(db: Session, skip: int = 0, limit: int = 100):
     return (
-        db.query(models.t_vw_ss_termsadmission_2021_189).offset(skip).limit(limit).all()
+        db.query(models.t_ss_termsadmission).offset(skip).limit(limit).all()
+    )
+
+
+def get_epgu_application(db: Session, skip: int = 0, limit: int = 100):
+    return (
+        db.query(models.SsEpguapplication).offset(skip).limit(limit).all()
+    )
+
+
+def insert_into_epgu_application(db: Session, user_guid: str, json_data: str, id_datatype: int):
+    row = models.SsEpguapplication(
+        epgu_id=user_guid,
+        json=json_data,
+        id_ss_entity_type=id_datatype
+    )
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
+    
+
+def get_statuses_to(db: Session, skip: int = 0, limit: int = 100):
+    return (
+        db.query(models.SsStatusesTo).offset(skip).limit(limit).all()
     )
