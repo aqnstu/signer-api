@@ -16,3 +16,10 @@ class Application(BaseModel):
     user_guid: str
     json_data: str
     id_datatype: int
+
+
+class EpguDocument(BaseModel):
+    user_guid: str
+    json_data: str
+    id_documenttype: int
+    

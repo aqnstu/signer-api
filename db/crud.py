@@ -127,3 +127,15 @@ def get_statuses_to(db: Session, skip: int = 0, limit: int = 100):
     return (
         db.query(models.SsStatusesTo).offset(skip).limit(limit).all()
     )
+    
+    
+def insert_into_epgu_document(db: Session, user_guid: str, json_data: str, id_documenttype: int):
+    row = models.SsEpgudocument(
+        epgu_id=user_guid,
+        json=json_data,
+        id_ss_documenttype=id_documenttype
+    )
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row

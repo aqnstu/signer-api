@@ -7,7 +7,7 @@ import logging.config
 from db import crud, models, schemas
 from db.database import SessionLocal, engine
 from logger import CustomizeLogger
-from model import Document, String, Application
+from model import Document, String, Application, EpguDocument
 from signer import get_jwt, to_base64_string
 
 
@@ -170,14 +170,18 @@ def read_terms_admission(
 
 
 @app.post("/api/db/insert-into-epgu-application")
-def create_record_for_epgu_application(app: Application, db: Session = Depends(get_db)):
+def create_record_for_user(app: Application, db: Session = Depends(get_db)):
     return crud.insert_into_epgu_application(db=db, user_guid=app.user_guid, json_data=app.json_data, id_datatype=app.id_datatype)
 
 
 @app.get("/api/db/get-statuses-to")
-def read_statuses_to(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_statuses_to(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     data = crud.get_statuses_to(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-epgu-document")
+def read_statuses_to(doc: EpguDocument, db: Session = Depends(get_db)):
+    data = crud.insert_into_epgu_document(db, user_guid=doc.user_guid, json_data=doc.json_data, id_documenttype=doc.id_documenttype)
     return data
 

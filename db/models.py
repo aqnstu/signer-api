@@ -238,17 +238,6 @@ class SsDocumentcategory(Base):
     name = Column(VARCHAR(100))
 
 
-class SsDocumenttype(Base):
-    __tablename__ = "ss_documenttypes"
-    __table_args__ = {"comment": "Типы документов"}
-
-    id = Column(Integer, primary_key=True)
-    actual = Column(Integer)
-    name = Column(VARCHAR(1000))
-    idcategory = Column(Integer)
-    idsyscategory = Column(Integer)
-
-
 class SsEducationform(Base):
     __tablename__ = "ss_educationforms"
     __table_args__ = {"comment": "Формы образования"}
@@ -905,3 +894,30 @@ class SsStatusesTo(Base):
     err_msg = Column(VARCHAR(4000), comment='сообщение об ошибке')
 
     ss_applicationstatus = relationship('SsApplicationstatus')
+
+
+class SsDocumenttype(Base):
+    __tablename__ = 'ss_documenttypes'
+    __table_args__ = {'schema': 'abituser', 'comment': 'Типы документов'}
+
+    id = Column(Integer, primary_key=True)
+    actual = Column(Integer)
+    name = Column(VARCHAR(1000))
+    idcategory = Column(Integer)
+    idsyscategory = Column(Integer)
+
+
+class SsEpgudocument(Base):
+    __tablename__ = 'ss_epgudocument'
+    __table_args__ = {'schema': 'abituser'}
+
+    pk = Column(Integer, primary_key=True)
+    epgu_id = Column(VARCHAR(128), nullable=False)
+    json = Column(Text)
+    date_add = Column(DateTime, nullable=False, server_default=text("sysdate "))
+    is_accepted = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0 "))
+    date_accept = Column(DateTime)
+    remark = Column(VARCHAR(4000))
+    id_ss_documenttype = Column(ForeignKey('abituser.ss_documenttypes.id'), nullable=False)
+
+    ss_documenttype = relationship('SsDocumenttype')
