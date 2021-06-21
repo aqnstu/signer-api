@@ -14,12 +14,14 @@ class String(BaseModel):
 
 class Application(BaseModel):
     user_guid: str
+    appnumber: int
     json_data: str
     id_datatype: int
 
 
 class EpguDocument(BaseModel):
     user_guid: str
+    appnumber: int
     json_data: str
     id_documenttype: int
     

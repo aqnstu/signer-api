@@ -877,6 +877,7 @@ class SsEpguapplication(Base):
     date_accept = Column(DateTime)
     remark = Column(VARCHAR(4000))
     id_ss_entity_type = Column(ForeignKey('abituser.ss_entity_type.id'), nullable=False)
+    epgu_application_id = Column(Integer)
 
     ss_entity_type = relationship('SsEntityType')
 
@@ -892,6 +893,7 @@ class SsStatusesTo(Base):
     is_processed = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0 "), comment='обработан ли, при ошибке -1')
     date_process = Column(DateTime, comment='дата обработки')
     err_msg = Column(VARCHAR(4000), comment='сообщение об ошибке')
+    epgu_application_id = Column(Integer)
 
     ss_applicationstatus = relationship('SsApplicationstatus')
 
@@ -919,5 +921,6 @@ class SsEpgudocument(Base):
     date_accept = Column(DateTime)
     remark = Column(VARCHAR(4000))
     id_ss_documenttype = Column(ForeignKey('abituser.ss_documenttypes.id'), nullable=False)
+    epgu_application_id = Column(Integer)
 
     ss_documenttype = relationship('SsDocumenttype')

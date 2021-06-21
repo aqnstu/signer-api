@@ -177,6 +177,7 @@ def create_record_epgu_application(app: Application, db: Session = Depends(get_d
     return crud.insert_into_epgu_application(
         db=db,
         user_guid=app.user_guid,
+        appnumber=app.appnumber,
         json_data=app.json_data,
         id_datatype=app.id_datatype,
     )
@@ -207,6 +208,7 @@ def create_record_epgu_document(doc: EpguDocument, db: Session = Depends(get_db)
     data = crud.insert_into_epgu_document(
         db,
         user_guid=doc.user_guid,
+        appnumber=doc.appnumber,
         json_data=doc.json_data,
         id_documenttype=doc.id_documenttype,
     )
