@@ -15,6 +15,7 @@ class String(BaseModel):
 class Application(BaseModel):
     user_guid: str
     appnumber: int
+    id_jwt_epgu: int
     json_data: str
     id_datatype: int
 
@@ -22,6 +23,7 @@ class Application(BaseModel):
 class EpguDocument(BaseModel):
     user_guid: str
     appnumber: int
+    id_jwt_epgu: int
     json_data: str
     id_documenttype: int
 
@@ -29,6 +31,7 @@ class EpguDocument(BaseModel):
 class EpguAchievement(BaseModel):
     user_guid: str
     appnumber: int
+    id_jwt_epgu: int
     json_data: str
     id_category: int
 

@@ -177,6 +177,7 @@ def create_record_epgu_application(app: Application, db: Session = Depends(get_d
     return crud.insert_into_epgu_application(
         db=db,
         user_guid=app.user_guid,
+        id_jwt_epgu=app.id_jwt_epgu,
         appnumber=app.appnumber,
         json_data=app.json_data,
         id_datatype=app.id_datatype,
@@ -209,6 +210,7 @@ def create_record_epgu_document(doc: EpguDocument, db: Session = Depends(get_db)
         db,
         user_guid=doc.user_guid,
         appnumber=doc.appnumber,
+        id_jwt_epgu=doc.id_jwt_epgu,
         json_data=doc.json_data,
         id_documenttype=doc.id_documenttype,
     )
@@ -227,6 +229,7 @@ def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(g
         db,
         user_guid=ach.user_guid,
         appnumber=ach.appnumber,
+        id_jwt_epgu=ach.id_jwt_epgu,
         json_data=ach.json_data,
         id_category=ach.id_category,
     )

@@ -869,6 +869,7 @@ class SsEpguapplication(Base):
     remark = Column(VARCHAR(4000))
     id_ss_entity_type = Column(ForeignKey('abituser.ss_entity_type.id'), nullable=False)
     epgu_application_id = Column(Integer)
+    id_jwt = Column(NUMBER(asdecimal=True))
 
     ss_entity_type = relationship('SsEntityType')
 
@@ -913,6 +914,7 @@ class SsEpgudocument(Base):
     remark = Column(VARCHAR(4000))
     id_ss_documenttype = Column(ForeignKey('abituser.ss_documenttypes.id'), nullable=False)
     epgu_application_id = Column(Integer)
+    id_jwt = Column(NUMBER(asdecimal=True))
 
     ss_documenttype = relationship('SsDocumenttype')
 
@@ -938,5 +940,6 @@ class SsEpguachievement(Base):
     remark = Column(VARCHAR(4000))
     id_ss_category = Column(ForeignKey('abituser.ss_achievementcategories.id'), nullable=False)
     epgu_application_id = Column(NUMBER(asdecimal=True))
+    id_jwt = Column(NUMBER(asdecimal=True))
 
     ss_achievementcategory = relationship('SsAchievementcategory')
