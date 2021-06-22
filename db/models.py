@@ -8,15 +8,6 @@ Base = declarative_base()
 metadata = Base.metadata
 
 
-class SsAchievementcategory(Base):
-    __tablename__ = "ss_achievementcategories"
-    __table_args__ = {"comment": "Категории индивидуальных достижений"}
-
-    id = Column(Integer, primary_key=True)
-    Actual = Column(Integer)
-    Name = Column(VARCHAR(500))
-
-
 t_ss_admissionvolume = Table(
     "ss_admissionvolume",
     metadata,
@@ -924,3 +915,28 @@ class SsEpgudocument(Base):
     epgu_application_id = Column(Integer)
 
     ss_documenttype = relationship('SsDocumenttype')
+
+class SsAchievementcategory(Base):
+    __tablename__ = 'ss_achievementcategories'
+    __table_args__ = {'schema': 'abituser', 'comment': 'Категории индивидуальных достижений'}
+
+    id = Column(Integer, primary_key=True)
+    Actual = Column(Integer)
+    Name = Column(VARCHAR(500))
+    
+
+class SsEpguachievement(Base):
+    __tablename__ = 'ss_epguachievement'
+    __table_args__ = {'schema': 'abituser'}
+
+    pk = Column(NUMBER(asdecimal=True), primary_key=True)
+    epgu_id = Column(VARCHAR(128), nullable=False)
+    json = Column(Text)
+    date_add = Column(DateTime, nullable=False, server_default=text("sysdate "))
+    is_accepted = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0       "))
+    date_accept = Column(DateTime)
+    remark = Column(VARCHAR(4000))
+    id_ss_category = Column(ForeignKey('abituser.ss_achievementcategories.id'), nullable=False)
+    epgu_application_id = Column(NUMBER(asdecimal=True))
+
+    ss_achievementcategory = relationship('SsAchievementcategory')

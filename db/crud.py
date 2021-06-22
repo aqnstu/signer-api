@@ -155,3 +155,19 @@ def insert_into_epgu_document(
     db.commit()
     db.refresh(row)
     return row
+
+
+def get_epgu_achievement(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.SsEpguachievement).offset(skip).limit(limit).all()
+
+
+def insert_into_epgu_achievement(
+    db: Session, user_guid: str, appnumber: int, json_data: str, id_category: int
+):
+    row = models.SsEpguachievement(
+        epgu_id=user_guid, epgu_application_id=appnumber, json=json_data, id_ss_category=id_category
+    )
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row

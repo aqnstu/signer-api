@@ -8,7 +8,7 @@ import logging.config
 from db import crud, models, schemas
 from db.database import SessionLocal, engine
 from logger import CustomizeLogger
-from model import Document, String, Application, EpguDocument, Status
+from model import Document, String, Application, EpguDocument, EpguAchievement, Status
 from signer import get_jwt, to_base64_string
 
 
@@ -213,3 +213,22 @@ def create_record_epgu_document(doc: EpguDocument, db: Session = Depends(get_db)
         id_documenttype=doc.id_documenttype,
     )
     return data
+
+
+@app.get("/api/db/get-epgu-achievement")
+def read_epgu_achievement(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-epgu-achievement")
+def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(get_db)):
+    data = crud.insert_into_epgu_achievement(
+        db,
+        user_guid=ach.user_guid,
+        appnumber=ach.appnumber,
+        json_data=ach.json_data,
+        id_category=ach.id_category,
+    )
+    return data
+

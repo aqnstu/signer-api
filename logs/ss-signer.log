@@ -3247,3 +3247,675 @@ response -> json_data
   field required (type=value_error.missing)
 response -> id_datatype
   field required (type=value_error.missing)
+ERROR    2021-06-22 17:40:13.901 request id: app - uvicorn.protocols.http.httptools_impl:run_asgi - Exception in ASGI application
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "/usr/lib64/python3.6/multiprocessing/spawn.py", line 105, in spawn_main
+    exitcode = _main(fd)
+               │     └ 10
+               └ <function _main at 0x7f8839e2a7b8>
+  File "/usr/lib64/python3.6/multiprocessing/spawn.py", line 118, in _main
+    return self._bootstrap()
+           │    └ <function BaseProcess._bootstrap at 0x7f883abadd08>
+           └ <SpawnProcess(SpawnProcess-4, started)>
+  File "/usr/lib64/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x7f883abad510>
+    └ <SpawnProcess(SpawnProcess-4, started)>
+  File "/usr/lib64/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x7f88399d5278>, 'target': <bound method Server.run of <uvicorn.server.Server obj...
+    │    │        │    │        └ <SpawnProcess(SpawnProcess-4, started)>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess(SpawnProcess-4, started)>
+    │    └ <function subprocess_started at 0x7f8835200048>
+    └ <SpawnProcess(SpawnProcess-4, started)>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=3, family=AddressFamily.AF_INET, type=2049, proto=0, laddr=('0.0.0.0', 8001)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x7f88351cd6d8>>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/server.py", line 50, in run
+    loop.run_until_complete(self.serve(sockets=sockets))
+    │    │                  │    │             └ [<socket.socket fd=3, family=AddressFamily.AF_INET, type=2049, proto=0, laddr=('0.0.0.0', 8001)>]
+    │    │                  │    └ <function Server.serve at 0x7f88351f5950>
+    │    │                  └ <uvicorn.server.Server object at 0x7f88351cd6d8>
+    │    └ <method 'run_until_complete' of 'uvloop.loop.Loop' objects>
+    └ <uvloop.Loop running=True closed=False debug=False>
+> File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/protocols/http/httptools_impl.py", line 371, in run_asgi
+    result = await app(self.scope, self.receive, self.send)
+                   │   │    │      │    │        │    └ <function RequestResponseCycle.send at 0x7f8834be6488>
+                   │   │    │      │    │        └ <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c50>
+                   │   │    │      │    └ <function RequestResponseCycle.receive at 0x7f8834be6510>
+                   │   │    │      └ <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c50>
+                   │   │    └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+                   │   └ <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c50>
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x7f8834bbe748>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/middleware/proxy_headers.py", line 59, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c...
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x7f88342e1240>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x7f8834bbe748>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/fastapi/applications.py", line 199, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c...
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/applications.py", line 112, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c...
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x7f8831f159b0>
+          └ <fastapi.applications.FastAPI object at 0x7f88342e1240>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/middleware/errors.py", line 181, in __call__
+    raise exc from None
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/middleware/errors.py", line 159, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x7f8830e73e18>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <starlette.exceptions.ExceptionMiddleware object at 0x7f8831f15978>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x7f8831f159b0>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/exceptions.py", line 82, in __call__
+    raise exc from None
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/exceptions.py", line 71, in __call__
+    await self.app(scope, receive, sender)
+          │    │   │      │        └ <function ExceptionMiddleware.__call__.<locals>.sender at 0x7f8830e73ae8>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x7f8832463d30>
+          └ <starlette.exceptions.ExceptionMiddleware object at 0x7f8831f15978>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/routing.py", line 580, in __call__
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function ExceptionMiddleware.__call__.<locals>.sender at 0x7f8830e73ae8>
+          │     │      │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │     └ <function Route.handle at 0x7f8832f70620>
+          └ <fastapi.routing.APIRoute object at 0x7f8830e74390>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/routing.py", line 241, in handle
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function ExceptionMiddleware.__call__.<locals>.sender at 0x7f8830e73ae8>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <function request_response.<locals>.app at 0x7f8830e73840>
+          └ <fastapi.routing.APIRoute object at 0x7f8830e74390>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/routing.py", line 52, in app
+    response = await func(request)
+                     │    └ <starlette.requests.Request object at 0x7f8830e74860>
+                     └ <function get_request_handler.<locals>.app at 0x7f8830e737b8>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/fastapi/routing.py", line 202, in app
+    dependant=dependant, values=values, is_coroutine=is_coroutine
+              │                 │                    └ False
+              │                 └ {'db': <sqlalchemy.orm.session.Session object at 0x7f88305e1470>, 'skip': 0, 'limit': 100}
+              └ <fastapi.dependencies.models.Dependant object at 0x7f8830e74588>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/fastapi/routing.py", line 150, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+                 │                 │         │       └ {'db': <sqlalchemy.orm.session.Session object at 0x7f88305e1470>, 'skip': 0, 'limit': 100}
+                 │                 │         └ <function read_epgu_document at 0x7f8830e736a8>
+                 │                 └ <fastapi.dependencies.models.Dependant object at 0x7f8830e74588>
+                 └ <function run_in_threadpool at 0x7f883335cbf8>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/concurrency.py", line 40, in run_in_threadpool
+    return await loop.run_in_executor(None, func, *args)
+                 │    │                     │      └ (functools.partial(<function read_epgu_document at 0x7f8830e736a8>, db=<sqlalchemy.orm.session.Session object at 0x7f88305e14...
+                 │    │                     └ <bound method Context.run of <contextvars.Context object at 0x7f8830e74b00>>
+                 │    └ <method 'run_in_executor' of 'uvloop.loop.Loop' objects>
+                 └ <uvloop.Loop running=True closed=False debug=False>
+  File "/usr/lib64/python3.6/concurrent/futures/thread.py", line 56, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │        │            └ None
+             │        └ None
+             └ None
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/contextvars/__init__.py", line 38, in run
+    return callable(*args, **kwargs)
+           │         │       └ {}
+           │         └ ()
+           └ functools.partial(<function read_epgu_document at 0x7f8830e736a8>, db=<sqlalchemy.orm.session.Session object at 0x7f88305e147...
+
+  File "./apiapp.py", line 220, in read_epgu_document
+    data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
+           │    │                    │        │           └ 100
+           │    │                    │        └ 0
+           │    │                    └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+           │    └ <function get_epgu_achievement at 0x7f88321ab9d8>
+           └ <module 'db.crud' from './db/crud.py'>
+
+  File "./db/crud.py", line 161, in get_epgu_achievement
+    return db.query(models.SsEpguachievement).offset(skip).limit(limit).all()
+           │  │     │      │                         │           └ 100
+           │  │     │      │                         └ 0
+           │  │     │      └ <class 'db.models.SsEpguachievement'>
+           │  │     └ <module 'db.models' from './db/models.py'>
+           │  └ <function Session.query at 0x7f88324cc9d8>
+           └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/session.py", line 2094, in query
+    return self._query_cls(entities, self, **kwargs)
+           │    │          │         │       └ {}
+           │    │          │         └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+           │    │          └ (<class 'db.models.SsEpguachievement'>,)
+           │    └ <class 'sqlalchemy.orm.query.Query'>
+           └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/query.py", line 175, in __init__
+    self._set_entities(entities)
+    │    │             └ (<class 'db.models.SsEpguachievement'>,)
+    │    └ <function Query._set_entities at 0x7f8832532f28>
+    └ <sqlalchemy.orm.query.Query object at 0x7f88305e1518>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/query.py", line 189, in _set_entities
+    for ent in util.to_list(entities)
+               │    │       └ (<class 'db.models.SsEpguachievement'>,)
+               │    └ <function to_list at 0x7f8832c296a8>
+               └ <module 'sqlalchemy.util' from '/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/__init__.py'>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/query.py", line 189, in <listcomp>
+    for ent in util.to_list(entities)
+        │      │    └ <function to_list at 0x7f8832c296a8>
+        │      └ <module 'sqlalchemy.util' from '/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/__init__.py'>
+        └ <class 'db.models.SsEpguachievement'>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/sql/coercions.py", line 179, in expect
+    insp._post_inspect
+    │    └ <sqlalchemy.util.langhelpers.HasMemoized.memoized_attribute object at 0x7f88325dfa20>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/langhelpers.py", line 1164, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+    │   │        │    │                    │    │    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+    │   │        │    │                    │    └ <function Mapper._post_inspect at 0x7f883256b2f0>
+    │   │        │    │                    └ <sqlalchemy.util.langhelpers.HasMemoized.memoized_attribute object at 0x7f88325dfa20>
+    │   │        │    └ '_post_inspect'
+    │   │        └ <sqlalchemy.util.langhelpers.HasMemoized.memoized_attribute object at 0x7f88325dfa20>
+    │   └ <attribute '__dict__' of 'AllowsLambdaRole' objects>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 2097, in _post_inspect
+    self._check_configure()
+    │    └ <function Mapper._check_configure at 0x7f88325706a8>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 1874, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    │                      │    └ <sqlalchemy.orm.decl_api.registry object at 0x7f88323fd198>
+    │                      └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+    └ <function _configure_registries at 0x7f8832571950>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 3384, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    │                        │           └ True
+    │                        └ set()
+    └ <function _do_configure_registries at 0x7f8832571a60>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 3423, in _do_configure_registries
+    mapper._post_configure_properties()
+    │      └ <function Mapper._post_configure_properties at 0x7f88325708c8>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 1891, in _post_configure_properties
+    prop.init()
+    │    └ <function MapperProperty.init at 0x7f8832639bf8>
+    └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/interfaces.py", line 222, in init
+    self.do_init()
+    │    └ <function RelationshipProperty.do_init at 0x7f88325e4b70>
+    └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2139, in do_init
+    self._setup_join_conditions()
+    │    └ <function RelationshipProperty._setup_join_conditions at 0x7f88325e4d08>
+    └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2251, in _setup_join_conditions
+    can_be_synced_fn=self._columns_are_mapped,
+                     │    └ <function RelationshipProperty._columns_are_mapped at 0x7f88325e52f0>
+                     └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2630, in __init__
+    self._determine_joins()
+    │    └ <function JoinCondition._determine_joins at 0x7f88325e59d8>
+    └ <sqlalchemy.orm.relationships.JoinCondition object at 0x7f88305ab128>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2773, in _determine_joins
+    from_=nfe,
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+
+sqlalchemy.exc.NoForeignKeysError: Could not determine join condition between parent/child tables on relationship SsEpguachievement.ss_achievementcategory - there are no foreign keys linking these tables.  Ensure that referencing columns are associated with a ForeignKey or ForeignKeyConstraint, or specify a 'primaryjoin' expression.
+ERROR    2021-06-22 17:40:13.927 request id: app - uvicorn.protocols.http.httptools_impl:run_asgi - Exception in ASGI application
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "/usr/lib64/python3.6/multiprocessing/spawn.py", line 105, in spawn_main
+    exitcode = _main(fd)
+               │     └ 10
+               └ <function _main at 0x7f8839e2a7b8>
+  File "/usr/lib64/python3.6/multiprocessing/spawn.py", line 118, in _main
+    return self._bootstrap()
+           │    └ <function BaseProcess._bootstrap at 0x7f883abadd08>
+           └ <SpawnProcess(SpawnProcess-4, started)>
+  File "/usr/lib64/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x7f883abad510>
+    └ <SpawnProcess(SpawnProcess-4, started)>
+  File "/usr/lib64/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x7f88399d5278>, 'target': <bound method Server.run of <uvicorn.server.Server obj...
+    │    │        │    │        └ <SpawnProcess(SpawnProcess-4, started)>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess(SpawnProcess-4, started)>
+    │    └ <function subprocess_started at 0x7f8835200048>
+    └ <SpawnProcess(SpawnProcess-4, started)>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=3, family=AddressFamily.AF_INET, type=2049, proto=0, laddr=('0.0.0.0', 8001)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x7f88351cd6d8>>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/server.py", line 50, in run
+    loop.run_until_complete(self.serve(sockets=sockets))
+    │    │                  │    │             └ [<socket.socket fd=3, family=AddressFamily.AF_INET, type=2049, proto=0, laddr=('0.0.0.0', 8001)>]
+    │    │                  │    └ <function Server.serve at 0x7f88351f5950>
+    │    │                  └ <uvicorn.server.Server object at 0x7f88351cd6d8>
+    │    └ <method 'run_until_complete' of 'uvloop.loop.Loop' objects>
+    └ <uvloop.Loop running=True closed=False debug=False>
+> File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/protocols/http/httptools_impl.py", line 371, in run_asgi
+    result = await app(self.scope, self.receive, self.send)
+                   │   │    │      │    │        │    └ <function RequestResponseCycle.send at 0x7f8834be6488>
+                   │   │    │      │    │        └ <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c50>
+                   │   │    │      │    └ <function RequestResponseCycle.receive at 0x7f8834be6510>
+                   │   │    │      └ <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c50>
+                   │   │    └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+                   │   └ <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c50>
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x7f8834bbe748>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/middleware/proxy_headers.py", line 59, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c...
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x7f88342e1240>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x7f8834bbe748>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/fastapi/applications.py", line 199, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c...
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/applications.py", line 112, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c...
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x7f8831f159b0>
+          └ <fastapi.applications.FastAPI object at 0x7f88342e1240>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/middleware/errors.py", line 181, in __call__
+    raise exc from None
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/middleware/errors.py", line 159, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x7f8830e73e18>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <starlette.exceptions.ExceptionMiddleware object at 0x7f8831f15978>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x7f8831f159b0>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/exceptions.py", line 82, in __call__
+    raise exc from None
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/exceptions.py", line 71, in __call__
+    await self.app(scope, receive, sender)
+          │    │   │      │        └ <function ExceptionMiddleware.__call__.<locals>.sender at 0x7f8830e73ae8>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x7f8832463d30>
+          └ <starlette.exceptions.ExceptionMiddleware object at 0x7f8831f15978>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/routing.py", line 580, in __call__
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function ExceptionMiddleware.__call__.<locals>.sender at 0x7f8830e73ae8>
+          │     │      │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │     └ <function Route.handle at 0x7f8832f70620>
+          └ <fastapi.routing.APIRoute object at 0x7f8830e74390>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/routing.py", line 241, in handle
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function ExceptionMiddleware.__call__.<locals>.sender at 0x7f8830e73ae8>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <function request_response.<locals>.app at 0x7f8830e73840>
+          └ <fastapi.routing.APIRoute object at 0x7f8830e74390>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/routing.py", line 52, in app
+    response = await func(request)
+                     │    └ <starlette.requests.Request object at 0x7f8830e74860>
+                     └ <function get_request_handler.<locals>.app at 0x7f8830e737b8>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/fastapi/routing.py", line 202, in app
+    dependant=dependant, values=values, is_coroutine=is_coroutine
+              │                 │                    └ False
+              │                 └ {'db': <sqlalchemy.orm.session.Session object at 0x7f88305e1470>, 'skip': 0, 'limit': 100}
+              └ <fastapi.dependencies.models.Dependant object at 0x7f8830e74588>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/fastapi/routing.py", line 150, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+                 │                 │         │       └ {'db': <sqlalchemy.orm.session.Session object at 0x7f88305e1470>, 'skip': 0, 'limit': 100}
+                 │                 │         └ <function read_epgu_document at 0x7f8830e736a8>
+                 │                 └ <fastapi.dependencies.models.Dependant object at 0x7f8830e74588>
+                 └ <function run_in_threadpool at 0x7f883335cbf8>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/concurrency.py", line 40, in run_in_threadpool
+    return await loop.run_in_executor(None, func, *args)
+                 │    │                     │      └ (functools.partial(<function read_epgu_document at 0x7f8830e736a8>, db=<sqlalchemy.orm.session.Session object at 0x7f88305e14...
+                 │    │                     └ <bound method Context.run of <contextvars.Context object at 0x7f8830e74b00>>
+                 │    └ <method 'run_in_executor' of 'uvloop.loop.Loop' objects>
+                 └ <uvloop.Loop running=True closed=False debug=False>
+  File "/usr/lib64/python3.6/concurrent/futures/thread.py", line 56, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │        │            └ None
+             │        └ None
+             └ None
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/contextvars/__init__.py", line 38, in run
+    return callable(*args, **kwargs)
+           │         │       └ {}
+           │         └ ()
+           └ functools.partial(<function read_epgu_document at 0x7f8830e736a8>, db=<sqlalchemy.orm.session.Session object at 0x7f88305e147...
+
+  File "./apiapp.py", line 220, in read_epgu_document
+    data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
+           │    │                    │        │           └ 100
+           │    │                    │        └ 0
+           │    │                    └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+           │    └ <function get_epgu_achievement at 0x7f88321ab9d8>
+           └ <module 'db.crud' from './db/crud.py'>
+
+  File "./db/crud.py", line 161, in get_epgu_achievement
+    return db.query(models.SsEpguachievement).offset(skip).limit(limit).all()
+           │  │     │      │                         │           └ 100
+           │  │     │      │                         └ 0
+           │  │     │      └ <class 'db.models.SsEpguachievement'>
+           │  │     └ <module 'db.models' from './db/models.py'>
+           │  └ <function Session.query at 0x7f88324cc9d8>
+           └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/session.py", line 2094, in query
+    return self._query_cls(entities, self, **kwargs)
+           │    │          │         │       └ {}
+           │    │          │         └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+           │    │          └ (<class 'db.models.SsEpguachievement'>,)
+           │    └ <class 'sqlalchemy.orm.query.Query'>
+           └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/query.py", line 175, in __init__
+    self._set_entities(entities)
+    │    │             └ (<class 'db.models.SsEpguachievement'>,)
+    │    └ <function Query._set_entities at 0x7f8832532f28>
+    └ <sqlalchemy.orm.query.Query object at 0x7f88305e1518>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/query.py", line 189, in _set_entities
+    for ent in util.to_list(entities)
+               │    │       └ (<class 'db.models.SsEpguachievement'>,)
+               │    └ <function to_list at 0x7f8832c296a8>
+               └ <module 'sqlalchemy.util' from '/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/__init__.py'>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/query.py", line 189, in <listcomp>
+    for ent in util.to_list(entities)
+        │      │    └ <function to_list at 0x7f8832c296a8>
+        │      └ <module 'sqlalchemy.util' from '/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/__init__.py'>
+        └ <class 'db.models.SsEpguachievement'>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/sql/coercions.py", line 179, in expect
+    insp._post_inspect
+    │    └ <sqlalchemy.util.langhelpers.HasMemoized.memoized_attribute object at 0x7f88325dfa20>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/langhelpers.py", line 1164, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+    │   │        │    │                    │    │    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+    │   │        │    │                    │    └ <function Mapper._post_inspect at 0x7f883256b2f0>
+    │   │        │    │                    └ <sqlalchemy.util.langhelpers.HasMemoized.memoized_attribute object at 0x7f88325dfa20>
+    │   │        │    └ '_post_inspect'
+    │   │        └ <sqlalchemy.util.langhelpers.HasMemoized.memoized_attribute object at 0x7f88325dfa20>
+    │   └ <attribute '__dict__' of 'AllowsLambdaRole' objects>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 2097, in _post_inspect
+    self._check_configure()
+    │    └ <function Mapper._check_configure at 0x7f88325706a8>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 1874, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    │                      │    └ <sqlalchemy.orm.decl_api.registry object at 0x7f88323fd198>
+    │                      └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+    └ <function _configure_registries at 0x7f8832571950>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 3384, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    │                        │           └ True
+    │                        └ set()
+    └ <function _do_configure_registries at 0x7f8832571a60>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 3423, in _do_configure_registries
+    mapper._post_configure_properties()
+    │      └ <function Mapper._post_configure_properties at 0x7f88325708c8>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 1891, in _post_configure_properties
+    prop.init()
+    │    └ <function MapperProperty.init at 0x7f8832639bf8>
+    └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/interfaces.py", line 222, in init
+    self.do_init()
+    │    └ <function RelationshipProperty.do_init at 0x7f88325e4b70>
+    └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2139, in do_init
+    self._setup_join_conditions()
+    │    └ <function RelationshipProperty._setup_join_conditions at 0x7f88325e4d08>
+    └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2251, in _setup_join_conditions
+    can_be_synced_fn=self._columns_are_mapped,
+                     │    └ <function RelationshipProperty._columns_are_mapped at 0x7f88325e52f0>
+                     └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2630, in __init__
+    self._determine_joins()
+    │    └ <function JoinCondition._determine_joins at 0x7f88325e59d8>
+    └ <sqlalchemy.orm.relationships.JoinCondition object at 0x7f88305ab128>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2773, in _determine_joins
+    from_=nfe,
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+
+sqlalchemy.exc.NoForeignKeysError: Could not determine join condition between parent/child tables on relationship SsEpguachievement.ss_achievementcategory - there are no foreign keys linking these tables.  Ensure that referencing columns are associated with a ForeignKey or ForeignKeyConstraint, or specify a 'primaryjoin' expression.
+ERROR    2021-06-22 17:40:13.941 request id: app - uvicorn.protocols.http.httptools_impl:run_asgi - Exception in ASGI application
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "/usr/lib64/python3.6/multiprocessing/spawn.py", line 105, in spawn_main
+    exitcode = _main(fd)
+               │     └ 10
+               └ <function _main at 0x7f8839e2a7b8>
+  File "/usr/lib64/python3.6/multiprocessing/spawn.py", line 118, in _main
+    return self._bootstrap()
+           │    └ <function BaseProcess._bootstrap at 0x7f883abadd08>
+           └ <SpawnProcess(SpawnProcess-4, started)>
+  File "/usr/lib64/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x7f883abad510>
+    └ <SpawnProcess(SpawnProcess-4, started)>
+  File "/usr/lib64/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x7f88399d5278>, 'target': <bound method Server.run of <uvicorn.server.Server obj...
+    │    │        │    │        └ <SpawnProcess(SpawnProcess-4, started)>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess(SpawnProcess-4, started)>
+    │    └ <function subprocess_started at 0x7f8835200048>
+    └ <SpawnProcess(SpawnProcess-4, started)>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=3, family=AddressFamily.AF_INET, type=2049, proto=0, laddr=('0.0.0.0', 8001)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x7f88351cd6d8>>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/server.py", line 50, in run
+    loop.run_until_complete(self.serve(sockets=sockets))
+    │    │                  │    │             └ [<socket.socket fd=3, family=AddressFamily.AF_INET, type=2049, proto=0, laddr=('0.0.0.0', 8001)>]
+    │    │                  │    └ <function Server.serve at 0x7f88351f5950>
+    │    │                  └ <uvicorn.server.Server object at 0x7f88351cd6d8>
+    │    └ <method 'run_until_complete' of 'uvloop.loop.Loop' objects>
+    └ <uvloop.Loop running=True closed=False debug=False>
+> File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/protocols/http/httptools_impl.py", line 371, in run_asgi
+    result = await app(self.scope, self.receive, self.send)
+                   │   │    │      │    │        │    └ <function RequestResponseCycle.send at 0x7f8834be6488>
+                   │   │    │      │    │        └ <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c50>
+                   │   │    │      │    └ <function RequestResponseCycle.receive at 0x7f8834be6510>
+                   │   │    │      └ <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c50>
+                   │   │    └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+                   │   └ <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c50>
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x7f8834bbe748>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/uvicorn/middleware/proxy_headers.py", line 59, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c...
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x7f88342e1240>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x7f8834bbe748>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/fastapi/applications.py", line 199, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c...
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/applications.py", line 112, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e74c...
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x7f8831f159b0>
+          └ <fastapi.applications.FastAPI object at 0x7f88342e1240>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/middleware/errors.py", line 181, in __call__
+    raise exc from None
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/middleware/errors.py", line 159, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x7f8830e73e18>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <starlette.exceptions.ExceptionMiddleware object at 0x7f8831f15978>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x7f8831f159b0>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/exceptions.py", line 82, in __call__
+    raise exc from None
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/exceptions.py", line 71, in __call__
+    await self.app(scope, receive, sender)
+          │    │   │      │        └ <function ExceptionMiddleware.__call__.<locals>.sender at 0x7f8830e73ae8>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x7f8832463d30>
+          └ <starlette.exceptions.ExceptionMiddleware object at 0x7f8831f15978>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/routing.py", line 580, in __call__
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function ExceptionMiddleware.__call__.<locals>.sender at 0x7f8830e73ae8>
+          │     │      │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │     └ <function Route.handle at 0x7f8832f70620>
+          └ <fastapi.routing.APIRoute object at 0x7f8830e74390>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/routing.py", line 241, in handle
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function ExceptionMiddleware.__call__.<locals>.sender at 0x7f8830e73ae8>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x7f8830e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.1'}, 'http_version': '1.0', 'server': ('127.0.0.1', 8001), 'cl...
+          │    └ <function request_response.<locals>.app at 0x7f8830e73840>
+          └ <fastapi.routing.APIRoute object at 0x7f8830e74390>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/routing.py", line 52, in app
+    response = await func(request)
+                     │    └ <starlette.requests.Request object at 0x7f8830e74860>
+                     └ <function get_request_handler.<locals>.app at 0x7f8830e737b8>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/fastapi/routing.py", line 202, in app
+    dependant=dependant, values=values, is_coroutine=is_coroutine
+              │                 │                    └ False
+              │                 └ {'db': <sqlalchemy.orm.session.Session object at 0x7f88305e1470>, 'skip': 0, 'limit': 100}
+              └ <fastapi.dependencies.models.Dependant object at 0x7f8830e74588>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/fastapi/routing.py", line 150, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+                 │                 │         │       └ {'db': <sqlalchemy.orm.session.Session object at 0x7f88305e1470>, 'skip': 0, 'limit': 100}
+                 │                 │         └ <function read_epgu_document at 0x7f8830e736a8>
+                 │                 └ <fastapi.dependencies.models.Dependant object at 0x7f8830e74588>
+                 └ <function run_in_threadpool at 0x7f883335cbf8>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/starlette/concurrency.py", line 40, in run_in_threadpool
+    return await loop.run_in_executor(None, func, *args)
+                 │    │                     │      └ (functools.partial(<function read_epgu_document at 0x7f8830e736a8>, db=<sqlalchemy.orm.session.Session object at 0x7f88305e14...
+                 │    │                     └ <bound method Context.run of <contextvars.Context object at 0x7f8830e74b00>>
+                 │    └ <method 'run_in_executor' of 'uvloop.loop.Loop' objects>
+                 └ <uvloop.Loop running=True closed=False debug=False>
+  File "/usr/lib64/python3.6/concurrent/futures/thread.py", line 56, in run
+    result = self.fn(*self.args, **self.kwargs)
+             │        │            └ None
+             │        └ None
+             └ None
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/contextvars/__init__.py", line 38, in run
+    return callable(*args, **kwargs)
+           │         │       └ {}
+           │         └ ()
+           └ functools.partial(<function read_epgu_document at 0x7f8830e736a8>, db=<sqlalchemy.orm.session.Session object at 0x7f88305e147...
+
+  File "./apiapp.py", line 220, in read_epgu_document
+    data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
+           │    │                    │        │           └ 100
+           │    │                    │        └ 0
+           │    │                    └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+           │    └ <function get_epgu_achievement at 0x7f88321ab9d8>
+           └ <module 'db.crud' from './db/crud.py'>
+
+  File "./db/crud.py", line 161, in get_epgu_achievement
+    return db.query(models.SsEpguachievement).offset(skip).limit(limit).all()
+           │  │     │      │                         │           └ 100
+           │  │     │      │                         └ 0
+           │  │     │      └ <class 'db.models.SsEpguachievement'>
+           │  │     └ <module 'db.models' from './db/models.py'>
+           │  └ <function Session.query at 0x7f88324cc9d8>
+           └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/session.py", line 2094, in query
+    return self._query_cls(entities, self, **kwargs)
+           │    │          │         │       └ {}
+           │    │          │         └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+           │    │          └ (<class 'db.models.SsEpguachievement'>,)
+           │    └ <class 'sqlalchemy.orm.query.Query'>
+           └ <sqlalchemy.orm.session.Session object at 0x7f88305e1470>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/query.py", line 175, in __init__
+    self._set_entities(entities)
+    │    │             └ (<class 'db.models.SsEpguachievement'>,)
+    │    └ <function Query._set_entities at 0x7f8832532f28>
+    └ <sqlalchemy.orm.query.Query object at 0x7f88305e1518>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/query.py", line 189, in _set_entities
+    for ent in util.to_list(entities)
+               │    │       └ (<class 'db.models.SsEpguachievement'>,)
+               │    └ <function to_list at 0x7f8832c296a8>
+               └ <module 'sqlalchemy.util' from '/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/__init__.py'>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/query.py", line 189, in <listcomp>
+    for ent in util.to_list(entities)
+        │      │    └ <function to_list at 0x7f8832c296a8>
+        │      └ <module 'sqlalchemy.util' from '/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/__init__.py'>
+        └ <class 'db.models.SsEpguachievement'>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/sql/coercions.py", line 179, in expect
+    insp._post_inspect
+    │    └ <sqlalchemy.util.langhelpers.HasMemoized.memoized_attribute object at 0x7f88325dfa20>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/langhelpers.py", line 1164, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+    │   │        │    │                    │    │    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+    │   │        │    │                    │    └ <function Mapper._post_inspect at 0x7f883256b2f0>
+    │   │        │    │                    └ <sqlalchemy.util.langhelpers.HasMemoized.memoized_attribute object at 0x7f88325dfa20>
+    │   │        │    └ '_post_inspect'
+    │   │        └ <sqlalchemy.util.langhelpers.HasMemoized.memoized_attribute object at 0x7f88325dfa20>
+    │   └ <attribute '__dict__' of 'AllowsLambdaRole' objects>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 2097, in _post_inspect
+    self._check_configure()
+    │    └ <function Mapper._check_configure at 0x7f88325706a8>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 1874, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    │                      │    └ <sqlalchemy.orm.decl_api.registry object at 0x7f88323fd198>
+    │                      └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+    └ <function _configure_registries at 0x7f8832571950>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 3384, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    │                        │           └ True
+    │                        └ set()
+    └ <function _do_configure_registries at 0x7f8832571a60>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 3423, in _do_configure_registries
+    mapper._post_configure_properties()
+    │      └ <function Mapper._post_configure_properties at 0x7f88325708c8>
+    └ <Mapper at 0x7f8832219e80; SsEpguachievement>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/mapper.py", line 1891, in _post_configure_properties
+    prop.init()
+    │    └ <function MapperProperty.init at 0x7f8832639bf8>
+    └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/interfaces.py", line 222, in init
+    self.do_init()
+    │    └ <function RelationshipProperty.do_init at 0x7f88325e4b70>
+    └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2139, in do_init
+    self._setup_join_conditions()
+    │    └ <function RelationshipProperty._setup_join_conditions at 0x7f88325e4d08>
+    └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2251, in _setup_join_conditions
+    can_be_synced_fn=self._columns_are_mapped,
+                     │    └ <function RelationshipProperty._columns_are_mapped at 0x7f88325e52f0>
+                     └ <RelationshipProperty at 0x7f88321f8bc8; ss_achievementcategory>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2630, in __init__
+    self._determine_joins()
+    │    └ <function JoinCondition._determine_joins at 0x7f88325e59d8>
+    └ <sqlalchemy.orm.relationships.JoinCondition object at 0x7f88305ab128>
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/orm/relationships.py", line 2773, in _determine_joins
+    from_=nfe,
+  File "/home/api/signer-api/env/lib64/python3.6/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+
+sqlalchemy.exc.NoForeignKeysError: Could not determine join condition between parent/child tables on relationship SsEpguachievement.ss_achievementcategory - there are no foreign keys linking these tables.  Ensure that referencing columns are associated with a ForeignKey or ForeignKeyConstraint, or specify a 'primaryjoin' expression.

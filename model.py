@@ -24,9 +24,16 @@ class EpguDocument(BaseModel):
     appnumber: int
     json_data: str
     id_documenttype: int
-    
+
+
+class EpguAchievement(BaseModel):
+    user_guid: str
+    appnumber: int
+    json_data: str
+    id_category: int
+
+
 class Status(BaseModel):
     pk: int
     is_processed: int
     err_msg: str
-    
