@@ -13,7 +13,7 @@ class String(BaseModel):
 
 
 class Application(BaseModel):
-    user_guid: str
+    user_guid: Optional[str] = None
     appnumber: int
     id_jwt_epgu: int
     json_data: str

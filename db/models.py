@@ -861,7 +861,7 @@ class SsEpguapplication(Base):
     __table_args__ = {'schema': 'abituser'}
 
     pk = Column(NUMBER(asdecimal=False), primary_key=True)
-    epgu_id = Column(VARCHAR(128), nullable=False)
+    epgu_id = Column(VARCHAR(128))
     json = Column(Text)
     date_add = Column(DateTime, nullable=False, server_default=text("sysdate "))
     is_accepted = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0 "))

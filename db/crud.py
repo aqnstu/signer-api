@@ -108,7 +108,7 @@ def get_epgu_application(db: Session, skip: int = 0, limit: int = 100):
 
 
 def insert_into_epgu_application(
-    db: Session, user_guid: str, appnumber: int, id_jwt_epgu: int,  json_data: str, id_datatype: int
+    db: Session, appnumber: int, id_jwt_epgu: int,  json_data: str, id_datatype: int, user_guid: str = None
 ):
     row = models.SsEpguapplication(
         epgu_id=user_guid,
