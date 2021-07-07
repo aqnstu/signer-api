@@ -206,14 +206,18 @@ def read_epgu_document(skip: int = 0, limit: int = 100, db: Session = Depends(ge
 
 @app.post("/api/db/insert-into-epgu-document")
 def create_record_epgu_document(doc: EpguDocument, db: Session = Depends(get_db)):
-    data = crud.insert_into_epgu_document(
-        db,
-        user_guid=doc.user_guid,
-        appnumber=doc.appnumber,
-        id_jwt_epgu=doc.id_jwt_epgu,
-        json_data=doc.json_data,
-        id_documenttype=doc.id_documenttype,
-    )
+    try:
+        data = crud.insert_into_epgu_document(
+            db,
+            user_guid=doc.user_guid,
+            appnumber=doc.appnumber,
+            id_jwt_epgu=doc.id_jwt_epgu,
+            json_data=doc.json_data,
+            id_documenttype=doc.id_documenttype,
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
     return data
 
 

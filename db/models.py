@@ -886,6 +886,7 @@ class SsStatusesTo(Base):
     date_process = Column(DateTime, comment='дата обработки')
     err_msg = Column(VARCHAR(4000), comment='сообщение об ошибке')
     epgu_application_id = Column(Integer)
+    remark = Column(VARCHAR(500))
 
     ss_applicationstatus = relationship('SsApplicationstatus')
 
@@ -914,7 +915,7 @@ class SsEpgudocument(Base):
     remark = Column(VARCHAR(4000))
     id_ss_documenttype = Column(ForeignKey('abituser.ss_documenttypes.id'), nullable=False)
     epgu_application_id = Column(Integer)
-    id_jwt = Column(NUMBER(asdecimal=True))
+    id_jwt = Column(Integer)
 
     ss_documenttype = relationship('SsDocumenttype')
 
@@ -925,21 +926,21 @@ class SsAchievementcategory(Base):
     id = Column(Integer, primary_key=True)
     Actual = Column(Integer)
     Name = Column(VARCHAR(500))
-    
+
 
 class SsEpguachievement(Base):
     __tablename__ = 'ss_epguachievement'
     __table_args__ = {'schema': 'abituser'}
 
-    pk = Column(NUMBER(asdecimal=True), primary_key=True)
+    pk = Column(NUMBER(asdecimal=False), primary_key=True)
     epgu_id = Column(VARCHAR(128), nullable=False)
     json = Column(Text)
     date_add = Column(DateTime, nullable=False, server_default=text("sysdate "))
-    is_accepted = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0       "))
+    is_accepted = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0       "))
     date_accept = Column(DateTime)
     remark = Column(VARCHAR(4000))
     id_ss_category = Column(ForeignKey('abituser.ss_achievementcategories.id'), nullable=False)
-    epgu_application_id = Column(NUMBER(asdecimal=True))
-    id_jwt = Column(NUMBER(asdecimal=True))
+    epgu_application_id = Column(NUMBER(asdecimal=False))
+    id_jwt = Column(Integer)
 
     ss_achievementcategory = relationship('SsAchievementcategory')
