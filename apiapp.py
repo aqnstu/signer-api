@@ -218,6 +218,7 @@ def create_record_epgu_document(doc: EpguDocument, db: Session = Depends(get_db)
     except Exception as e:
         app.logger.error(e)
         data = None
+        raise HTTPException(status_code=500, detail="DB error")
     return data
 
 
@@ -229,13 +230,18 @@ def read_epgu_achievement(skip: int = 0, limit: int = 100, db: Session = Depends
 
 @app.post("/api/db/insert-into-epgu-achievement")
 def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(get_db)):
-    data = crud.insert_into_epgu_achievement(
-        db,
-        user_guid=ach.user_guid,
-        appnumber=ach.appnumber,
-        id_jwt_epgu=ach.id_jwt_epgu,
-        json_data=ach.json_data,
-        id_category=ach.id_category,
-    )
+    try:
+        data = crud.insert_into_epgu_achievement(
+            db,
+            user_guid=ach.user_guid,
+            appnumber=ach.appnumber,
+            id_jwt_epgu=ach.id_jwt_epgu,
+            json_data=ach.json_data,
+            id_category=ach.id_category,
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
+        raise HTTPException(status_code=500, detail="DB error")
     return data
 
