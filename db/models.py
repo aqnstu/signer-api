@@ -944,3 +944,34 @@ class SsEpguachievement(Base):
     id_jwt = Column(Integer)
 
     ss_achievementcategory = relationship('SsAchievementcategory')
+
+ 
+t_vw_ss_comp_applist_2021 = Table(
+    'vw$ss_comp_applist_2021', metadata,
+    Column('UIDCompetitiveGroup', NUMBER(asdecimal=False)),
+    Column('AdmissionVolume', NUMBER(asdecimal=False)),
+    Column('CountFirstStep', NUMBER(asdecimal=False)),
+    Column('CountSecondStep', NUMBER(asdecimal=False)),
+    Column('Changed', DateTime),
+    Column('UIDEpgu', NUMBER(asdecimal=False)),
+    Column('UID', VARCHAR(302)),
+    Column('Rating', NUMBER(asdecimal=False)),
+    Column('EntranceTest1', VARCHAR(256)),
+    Column('Result1', NUMBER(asdecimal=False)),
+    Column('EntranceTest2', VARCHAR(256)),
+    Column('Result2', NUMBER(asdecimal=False)),
+    Column('EntranceTest3', VARCHAR(256)),
+    Column('Result3', NUMBER(asdecimal=False)),
+    Column('EntranceTest4', VARCHAR(256)),
+    Column('Result4', NUMBER(asdecimal=False)),
+    Column('EntranceTest5', VARCHAR(256)),
+    Column('Result5', NUMBER(asdecimal=False)),
+    Column('Mark', NUMBER(asdecimal=False)),
+    Column('Benefit', CHAR(5)),
+    Column('SumMark', NUMBER(asdecimal=False)),
+    Column('Agreed', VARCHAR(5)),
+    Column('Original', VARCHAR(5)),
+    Column('Addition', VARCHAR(0)),
+    Column('Enlisted', NUMBER(asdecimal=False)),
+    schema='abituser'
+)

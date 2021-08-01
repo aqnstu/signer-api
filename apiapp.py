@@ -245,3 +245,8 @@ def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(g
         raise HTTPException(status_code=500, detail="DB error")
     return data
 
+
+@app.get("/api/db/get-competitive-group-applications-list")
+def read_competitive_group_applications_list(skip: int = 0, limit: int = 40000, db: Session = Depends(get_db)):
+    data = crud.get_competitive_group_applications_list(db, skip=skip, limit=limit)
+    return data

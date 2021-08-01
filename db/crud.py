@@ -183,3 +183,7 @@ def insert_into_epgu_achievement(
     db.commit()
     db.refresh(row)
     return row
+
+
+def get_competitive_group_applications_list(db: Session, skip: int = 0, limit: int = 40000):
+    return db.query(models.t_vw_ss_comp_applist_2021).offset(skip).limit(limit).all()
