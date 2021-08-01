@@ -185,5 +185,8 @@ def insert_into_epgu_achievement(
     return row
 
 
-def get_competitive_group_applications_list(db: Session, skip: int = 0, limit: int = 40000):
-    return db.query(models.t_vw_ss_comp_applist_2021).offset(skip).limit(limit).all()
+def get_competitive_group_applications_list(db: Session, competitive_group: int = None, skip: int = 0, limit: int = 40000, ):
+    if not competitive_group:
+        return db.query(models.t_vw_ss_comp_applist_2021).offset(skip).limit(limit).all()
+    else:
+        return db.query(models.t_vw_ss_comp_applist_2021).filter(models.t_vw_ss_comp_applist_2021.c.UIDCompetitiveGroup == competitive_group).offset(skip).limit(limit).all()

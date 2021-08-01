@@ -247,6 +247,6 @@ def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(g
 
 
 @app.get("/api/db/get-competitive-group-applications-list")
-def read_competitive_group_applications_list(skip: int = 0, limit: int = 40000, db: Session = Depends(get_db)):
-    data = crud.get_competitive_group_applications_list(db, skip=skip, limit=limit)
+def read_competitive_group_applications_list(competitive_group: int = None, skip: int = 0, limit: int = 40000, db: Session = Depends(get_db)):
+    data = crud.get_competitive_group_applications_list(db, competitive_group=competitive_group, skip=skip, limit=limit)
     return data
