@@ -9,7 +9,8 @@ from db import crud, models, schemas
 from db.database import SessionLocal, engine
 from logger import CustomizeLogger
 from model import Document, String, Application, EpguDocument, EpguAchievement, Status
-from signer import get_jwt, to_base64_string
+from signer import get_jwt, to_base64_string, sign_file
+from loading import download, upload
 
 
 def create_app() -> FastAPI:
@@ -250,3 +251,11 @@ def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(g
 def read_competitive_group_applications_list(competitive_group: int = None, skip: int = 0, limit: int = 40000, db: Session = Depends(get_db)):
     data = crud.get_competitive_group_applications_list(db, competitive_group=competitive_group, skip=skip, limit=limit)
     return data
+
+
+@app.get("/api/minio/sign")
+def minio_sign(bucket: str, minio_id: str, db: Session = Depends(get_db)):
+    file_name = download(bucket, minio_id)
+    file_name_sign = sign_file(file_name)
+    minio_id_sign = upload(bucket, minio_id, file_name_sign)
+    return minio_id_sign
