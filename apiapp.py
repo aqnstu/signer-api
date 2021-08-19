@@ -1,18 +1,25 @@
 # -*- coding: utf-8 -*-
-from fastapi import Depends, FastAPI, HTTPException, Body
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
-import logging.config
+from typing import Dict, List
 
-# import uvicorn
-
-from db import crud, models, schemas
-from db.database import SessionLocal, engine
+from db import crud
+from db.database import SessionLocal
+from utils.decorators import get_original_docstring
 from logger import CustomizeLogger
-from model import Document, String, Application, EpguDocument, EpguAchievement, Status
-from signer import get_jwt, to_base64_string
+import logging.config
+from model import (Document, MinioPath, String,
+                   Application, EpguDocument,
+                   EpguAchievement, Status,
+                   MinioPath)
+import utils.loading
+import utils.signer 
 
 
 def create_app() -> FastAPI:
+    """
+    Создать приложение FastAPI.
+    """
     app = FastAPI(title="Signer API", debug=False)
     logger = CustomizeLogger.make_logger()
     app.logger = logger
@@ -24,6 +31,9 @@ app = create_app()
 
 
 def get_db():
+    """
+    Получить сессию БД.
+    """
     db = SessionLocal()
     try:
         yield db
@@ -32,28 +42,34 @@ def get_db():
 
 
 @app.get("/")
-def read_root():
+def root() -> Dict[str, str]:
+    """
+    Домашняя страница :)
+    """
     return {
-        "message": "API для подписи и получения данных для работы с суперсервисом [Поступи онлайн]"
+        "message": "API для подписи и получения"
+        "данных для работы с суперсервисом [Поступи онлайн]"
     }
 
 
 @app.post("/api/utils/create-base64")
-def create_item(s: String) -> str:
-    data_base64 = to_base64_string(s.data)
+def create_base64(s: String) -> Dict[str, str]:
+    """Получить строку Base64 из обычной строки."""
+    data_base64 = utils.signer.to_base64_string(s.data)
     return {"data_base64": data_base64}
 
 
 @app.post("/api/utils/create-jwt")
-def read_item(doc: Document) -> str:
-    jwt = get_jwt(header=doc.header, payload=doc.payload)
+@get_original_docstring(utils.signer.get_jwt)
+def create_jwt(doc: Document) -> Dict[str, str]:
+    jwt = utils.signer.get_jwt(header=doc.header, payload=doc.payload)
     return {"jwt": jwt}
 
 
 @app.get("/api/db/get-subdivision-org")
-def read_subdivision_org(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_subdivision_org(skip: int = 0,
+                         limit: int = 100,
+                         db: Session = Depends(get_db)):
     try:
         data = crud.get_subdivision_org(db, skip=skip, limit=limit)
         return data
@@ -63,9 +79,9 @@ def read_subdivision_org(
 
 
 @app.get("/api/db/get-education-program")
-def read_education_program(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_education_program(skip: int = 0,
+                           limit: int = 100,
+                           db: Session = Depends(get_db)):
     try:
         data = crud.get_education_program(db, skip=skip, limit=limit)
         return data
@@ -231,14 +247,12 @@ def read_epgu_achievement(skip: int = 0, limit: int = 100, db: Session = Depends
 @app.post("/api/db/insert-into-epgu-achievement")
 def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(get_db)):
     try:
-        data = crud.insert_into_epgu_achievement(
-            db,
-            user_guid=ach.user_guid,
-            appnumber=ach.appnumber,
-            id_jwt_epgu=ach.id_jwt_epgu,
-            json_data=ach.json_data,
-            id_category=ach.id_category,
-        )
+        data = crud.insert_into_epgu_achievement(db,
+                                                 user_guid=ach.user_guid,
+                                                 appnumber=ach.appnumber,
+                                                 id_jwt_epgu=ach.id_jwt_epgu,
+                                                 json_data=ach.json_data,
+                                                 id_category=ach.id_category)
     except Exception as e:
         app.logger.error(e)
         data = None
@@ -247,6 +261,23 @@ def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(g
 
 
 @app.get("/api/db/get-competitive-group-applications-list")
-def read_competitive_group_applications_list(competitive_group: int = None, skip: int = 0, limit: int = 40000, db: Session = Depends(get_db)):
-    data = crud.get_competitive_group_applications_list(db, competitive_group=competitive_group, skip=skip, limit=limit)
+def read_competitive_group_applications_list(competitive_group: int = None,
+                                             skip: int = 0,
+                                             limit: int = 40000,
+                                             db: Session = Depends(get_db)):
+    data = crud.get_competitive_group_applications_list(db,
+                                                        competitive_group=competitive_group,
+                                                        skip=skip,
+                                                        limit=limit)
     return data
+
+
+@app.post("/api/minio/sign")
+def sign_and_upload_back_to_minio(path: MinioPath) -> Dict[str, str]:
+    """
+    Подписать файл из Minio и выгрузить подпись рядом с файлом.
+    """
+    file_name = utils.loading.download(path.bucket_name, path.id_minio)
+    file_name_sign = utils.signer.sign_file(file_name)
+    minio_id_sign = utils.loading.upload(path.bucket_name, path.id_minio, file_name_sign)
+    return minio_id_sign

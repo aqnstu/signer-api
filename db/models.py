@@ -954,7 +954,7 @@ t_vw_ss_comp_applist_2021 = Table(
     Column('CountSecondStep', NUMBER(asdecimal=True)),
     Column('Changed', DateTime),
     Column('UIDEpgu', NUMBER(asdecimal=True)),
-    Column('UID', VARCHAR(302)),
+    Column('UID', VARCHAR(343)),
     Column('Rating', NUMBER(asdecimal=True)),
     Column('EntranceTest1', VARCHAR(256)),
     Column('Result1', NUMBER(asdecimal=True)),
@@ -973,5 +973,7 @@ t_vw_ss_comp_applist_2021 = Table(
     Column('Original', VARCHAR(5)),
     Column('Addition', VARCHAR(0)),
     Column('Enlisted', NUMBER(asdecimal=True)),
+    Column('WithoutTests', CHAR(4)),
+    Column('ReasonWithoutTests', CHAR(61)),
     schema='abituser'
 )

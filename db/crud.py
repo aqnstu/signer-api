@@ -107,9 +107,12 @@ def get_epgu_application(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.SsEpguapplication).offset(skip).limit(limit).all()
 
 
-def insert_into_epgu_application(
-    db: Session, appnumber: int, id_jwt_epgu: int,  json_data: str, id_datatype: int, user_guid: str = None
-):
+def insert_into_epgu_application(db: Session,
+                                 appnumber: int,
+                                 id_jwt_epgu: int, 
+                                 json_data: str,
+                                 id_datatype: int,
+                                 user_guid: str = None):
     row = models.SsEpguapplication(
         epgu_id=user_guid,
         epgu_application_id=appnumber,
@@ -169,9 +172,12 @@ def get_epgu_achievement(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.SsEpguachievement).offset(skip).limit(limit).all()
 
 
-def insert_into_epgu_achievement(
-    db: Session, user_guid: str, appnumber: int, id_jwt_epgu: int, json_data: str, id_category: int
-):
+def insert_into_epgu_achievement(db: Session,
+                                 user_guid: str,
+                                 appnumber: int,
+                                 id_jwt_epgu: int,
+                                 json_data: str,
+                                 id_category: int):
     row = models.SsEpguachievement(
         epgu_id=user_guid,
         epgu_application_id=appnumber,
