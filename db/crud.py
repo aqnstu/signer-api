@@ -108,14 +108,19 @@ def get_epgu_application(db: Session, skip: int = 0, limit: int = 100):
 
 
 def insert_into_epgu_application(
-    db: Session, appnumber: int, id_jwt_epgu: int,  json_data: str, id_datatype: int, user_guid: str = None
+    db: Session,
+    appnumber: int,
+    id_jwt_epgu: int,
+    json_data: str,
+    id_datatype: int,
+    user_guid: str = None,
 ):
     row = models.SsEpguapplication(
         epgu_id=user_guid,
         epgu_application_id=appnumber,
         id_jwt=id_jwt_epgu,
         json=json_data,
-        id_ss_entity_type=id_datatype
+        id_ss_entity_type=id_datatype,
     )
     db.add(row)
     db.commit()
@@ -150,14 +155,19 @@ def get_epgu_document(db: Session, skip: int = 0, limit: int = 100):
 
 
 def insert_into_epgu_document(
-    db: Session, user_guid: str, appnumber: int, id_jwt_epgu:int, json_data: str, id_documenttype: int
+    db: Session,
+    user_guid: str,
+    appnumber: int,
+    id_jwt_epgu: int,
+    json_data: str,
+    id_documenttype: int,
 ):
     row = models.SsEpgudocument(
         epgu_id=user_guid,
         epgu_application_id=appnumber,
         id_jwt=id_jwt_epgu,
         json=json_data,
-        id_ss_documenttype=id_documenttype
+        id_ss_documenttype=id_documenttype,
     )
     db.add(row)
     db.commit()
@@ -170,14 +180,19 @@ def get_epgu_achievement(db: Session, skip: int = 0, limit: int = 100):
 
 
 def insert_into_epgu_achievement(
-    db: Session, user_guid: str, appnumber: int, id_jwt_epgu: int, json_data: str, id_category: int
+    db: Session,
+    user_guid: str,
+    appnumber: int,
+    id_jwt_epgu: int,
+    json_data: str,
+    id_category: int,
 ):
     row = models.SsEpguachievement(
         epgu_id=user_guid,
         epgu_application_id=appnumber,
         id_jwt=id_jwt_epgu,
         json=json_data,
-        id_ss_category=id_category
+        id_ss_category=id_category,
     )
     db.add(row)
     db.commit()
@@ -185,8 +200,24 @@ def insert_into_epgu_achievement(
     return row
 
 
-def get_competitive_group_applications_list(db: Session, competitive_group: int = None, skip: int = 0, limit: int = 40000, ):
+def get_competitive_group_applications_list(
+    db: Session,
+    competitive_group: int = None,
+    skip: int = 0,
+    limit: int = 40000,
+):
     if not competitive_group:
-        return db.query(models.t_vw_ss_comp_applist_2021).offset(skip).limit(limit).all()
+        return (
+            db.query(models.t_vw_ss_comp_applist_2021).offset(skip).limit(limit).all()
+        )
     else:
-        return db.query(models.t_vw_ss_comp_applist_2021).filter(models.t_vw_ss_comp_applist_2021.c.UIDCompetitiveGroup == competitive_group).offset(skip).limit(limit).all()
+        return (
+            db.query(models.t_vw_ss_comp_applist_2021)
+            .filter(
+                models.t_vw_ss_comp_applist_2021.c.UIDCompetitiveGroup
+                == competitive_group
+            )
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )

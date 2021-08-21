@@ -8,12 +8,18 @@ from db.database import SessionLocal
 from utils.decorators import get_original_docstring
 from logger import CustomizeLogger
 import logging.config
-from model import (Document, MinioPath, String,
-                   Application, EpguDocument,
-                   EpguAchievement, Status,
-                   MinioPath)
+from model import (
+    Document,
+    MinioPath,
+    String,
+    Application,
+    EpguDocument,
+    EpguAchievement,
+    Status,
+    MinioPath,
+)
 import utils.loading
-import utils.signer 
+import utils.signer
 
 
 def create_app() -> FastAPI:
@@ -67,9 +73,9 @@ def create_jwt(doc: Document) -> Dict[str, str]:
 
 
 @app.get("/api/db/get-subdivision-org")
-def read_subdivision_org(skip: int = 0,
-                         limit: int = 100,
-                         db: Session = Depends(get_db)):
+def read_subdivision_org(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
     try:
         data = crud.get_subdivision_org(db, skip=skip, limit=limit)
         return data
@@ -79,9 +85,9 @@ def read_subdivision_org(skip: int = 0,
 
 
 @app.get("/api/db/get-education-program")
-def read_education_program(skip: int = 0,
-                           limit: int = 100,
-                           db: Session = Depends(get_db)):
+def read_education_program(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
     try:
         data = crud.get_education_program(db, skip=skip, limit=limit)
         return data
@@ -208,10 +214,10 @@ def read_statuses_to(skip: int = 0, limit: int = 100, db: Session = Depends(get_
 
 @app.post("/api/db/update-statuses-to")
 def update_record_statuses_to(stat: Status, db: Session = Depends(get_db)):
-    data = crud.update_into_statuses_to(
+    crud.update_into_statuses_to(
         db, pk=stat.pk, is_processed=stat.is_processed, err_msg=stat.err_msg
     )
-    return {'status': 'OK'}
+    return {"status": "OK"}
 
 
 @app.get("/api/db/get-epgu-document")
@@ -239,7 +245,9 @@ def create_record_epgu_document(doc: EpguDocument, db: Session = Depends(get_db)
 
 
 @app.get("/api/db/get-epgu-achievement")
-def read_epgu_achievement(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_epgu_achievement(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
     data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
     return data
 
@@ -247,12 +255,14 @@ def read_epgu_achievement(skip: int = 0, limit: int = 100, db: Session = Depends
 @app.post("/api/db/insert-into-epgu-achievement")
 def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(get_db)):
     try:
-        data = crud.insert_into_epgu_achievement(db,
-                                                 user_guid=ach.user_guid,
-                                                 appnumber=ach.appnumber,
-                                                 id_jwt_epgu=ach.id_jwt_epgu,
-                                                 json_data=ach.json_data,
-                                                 id_category=ach.id_category)
+        data = crud.insert_into_epgu_achievement(
+            db,
+            user_guid=ach.user_guid,
+            appnumber=ach.appnumber,
+            id_jwt_epgu=ach.id_jwt_epgu,
+            json_data=ach.json_data,
+            id_category=ach.id_category,
+        )
     except Exception as e:
         app.logger.error(e)
         data = None
@@ -261,14 +271,15 @@ def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(g
 
 
 @app.get("/api/db/get-competitive-group-applications-list")
-def read_competitive_group_applications_list(competitive_group: int = None,
-                                             skip: int = 0,
-                                             limit: int = 40000,
-                                             db: Session = Depends(get_db)):
-    data = crud.get_competitive_group_applications_list(db,
-                                                        competitive_group=competitive_group,
-                                                        skip=skip,
-                                                        limit=limit)
+def read_competitive_group_applications_list(
+    competitive_group: int = None,
+    skip: int = 0,
+    limit: int = 40000,
+    db: Session = Depends(get_db),
+):
+    data = crud.get_competitive_group_applications_list(
+        db, competitive_group=competitive_group, skip=skip, limit=limit
+    )
     return data
 
 
@@ -279,5 +290,8 @@ def sign_and_upload_back_to_minio(path: MinioPath) -> Dict[str, str]:
     """
     file_name = utils.loading.download(path.bucket_name, path.id_minio)
     file_name_sign = utils.signer.sign_file(file_name)
-    minio_id_sign = utils.loading.upload(path.bucket_name, path.id_minio, file_name_sign)
+    minio_id_sign = utils.loading.upload(
+        path.bucket_name, path.id_minio, file_name_sign
+    )
+
     return minio_id_sign
