@@ -5,7 +5,6 @@ from typing import Dict, List
 
 from db import crud
 from db.database import SessionLocal
-from utils.decorators import get_original_docstring
 from logger import CustomizeLogger
 import logging.config
 from model import (
@@ -18,6 +17,8 @@ from model import (
     Status,
     MinioPath,
 )
+from sms.sms import get_balance, get_number_available, send_sms, get_sms_state
+from utils.decorators import get_original_docstring
 import utils.loading
 import utils.signer
 
@@ -295,3 +296,45 @@ def sign_and_upload_back_to_minio(path: MinioPath) -> Dict[str, str]:
         path.bucket_name, path.id_minio, file_name_sign
     )
     return minio_id_sign
+
+
+@app.post("/moby_balance")
+def get_available_balance():
+    """
+    Получить баланс.
+    """
+    data = get_balance()
+
+    return data
+
+
+@app.post("/moby_number_available")
+def get_number_available_sms():
+    """
+    Получить количество доступных СМС для отправки.
+    """
+    data = get_number_available()
+
+    return data
+
+
+@app.post("/moby")
+def send_sms_to_phone(phone: str, text: str):
+    """
+    Отправить сообщение адресату ("GET" API).
+    """
+    data = send_sms(phone, text)
+    data_parsed = str(data.get("id_sms")) if data.get("id_sms", False) else data.get("msg")
+
+    return data_parsed
+
+
+@app.post("/moby_state")
+def get_sms_state_by_id(id_sms: int):
+    """
+    Получить статус SMS.
+    """
+    data = get_sms_state(id_sms)
+    data_parsed = data.get("status") if data.get("status", False) else data.get("msg")
+
+    return data_parsed

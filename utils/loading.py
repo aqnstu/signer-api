@@ -4,7 +4,6 @@ import io
 import os
 
 from configs.minio import MINIO
-from signer import sign_file
 
 client = Minio(
     f"{MINIO['host']}:{MINIO['port']}",
