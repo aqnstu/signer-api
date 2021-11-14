@@ -214,7 +214,7 @@ def read_statuses_to(skip: int = 0, limit: int = 100, db: Session = Depends(get_
 
 @app.post("/api/db/update-statuses-to")
 def update_record_statuses_to(stat: Status, db: Session = Depends(get_db)):
-    crud.update_into_statuses_to(
+    data = crud.update_into_statuses_to(
         db, pk=stat.pk, is_processed=stat.is_processed, err_msg=stat.err_msg
     )
     return {"status": "OK"}
@@ -290,8 +290,8 @@ def sign_and_upload_back_to_minio(path: MinioPath) -> Dict[str, str]:
     """
     file_name = utils.loading.download(path.bucket_name, path.id_minio)
     file_name_sign = utils.signer.sign_file(file_name)
+    app.logger.error(file_name_sign)
     minio_id_sign = utils.loading.upload(
         path.bucket_name, path.id_minio, file_name_sign
     )
-
     return minio_id_sign
