@@ -1,19 +1,32 @@
 # -*- coding: utf-8 -*-
-from fastapi import Depends, FastAPI, HTTPException, Body
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
-import logging.config
+from typing import Dict, List
 
-# import uvicorn
-
-from db import crud, models, schemas
-from db.database import SessionLocal, engine
+from db import crud
+from db.database import SessionLocal
 from logger import CustomizeLogger
-from model import Document, String, Application, EpguDocument, EpguAchievement, Status
-from signer import get_jwt, to_base64_string, sign_file
-from loading import download, upload
+import logging.config
+from model import (
+    Document,
+    MinioPath,
+    String,
+    Application,
+    EpguDocument,
+    EpguAchievement,
+    Status,
+    MinioPath,
+)
+from sms.sms import get_balance, get_number_available, send_sms, get_sms_state
+from utils.decorators import get_original_docstring
+import utils.loading
+import utils.signer
 
 
 def create_app() -> FastAPI:
+    """
+    Создать приложение FastAPI.
+    """
     app = FastAPI(title="Signer API", debug=False)
     logger = CustomizeLogger.make_logger()
     app.logger = logger
@@ -25,6 +38,9 @@ app = create_app()
 
 
 def get_db():
+    """
+    Получить сессию БД.
+    """
     db = SessionLocal()
     try:
         yield db
@@ -33,21 +49,27 @@ def get_db():
 
 
 @app.get("/")
-def read_root():
+def root() -> Dict[str, str]:
+    """
+    Домашняя страница :)
+    """
     return {
-        "message": "API для подписи и получения данных для работы с суперсервисом [Поступи онлайн]"
+        "message": "API для подписи и получения"
+        "данных для работы с суперсервисом [Поступи онлайн]"
     }
 
 
 @app.post("/api/utils/create-base64")
-def create_item(s: String) -> str:
-    data_base64 = to_base64_string(s.data)
+def create_base64(s: String) -> Dict[str, str]:
+    """Получить строку Base64 из обычной строки."""
+    data_base64 = utils.signer.to_base64_string(s.data)
     return {"data_base64": data_base64}
 
 
 @app.post("/api/utils/create-jwt")
-def read_item(doc: Document) -> str:
-    jwt = get_jwt(header=doc.header, payload=doc.payload)
+@get_original_docstring(utils.signer.get_jwt)
+def create_jwt(doc: Document) -> Dict[str, str]:
+    jwt = utils.signer.get_jwt(header=doc.header, payload=doc.payload)
     return {"jwt": jwt}
 
 
@@ -196,7 +218,7 @@ def update_record_statuses_to(stat: Status, db: Session = Depends(get_db)):
     data = crud.update_into_statuses_to(
         db, pk=stat.pk, is_processed=stat.is_processed, err_msg=stat.err_msg
     )
-    return {'status': 'OK'}
+    return {"status": "OK"}
 
 
 @app.get("/api/db/get-epgu-document")
@@ -224,7 +246,9 @@ def create_record_epgu_document(doc: EpguDocument, db: Session = Depends(get_db)
 
 
 @app.get("/api/db/get-epgu-achievement")
-def read_epgu_achievement(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_epgu_achievement(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
     data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
     return data
 
@@ -248,14 +272,69 @@ def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(g
 
 
 @app.get("/api/db/get-competitive-group-applications-list")
-def read_competitive_group_applications_list(competitive_group: int = None, skip: int = 0, limit: int = 40000, db: Session = Depends(get_db)):
-    data = crud.get_competitive_group_applications_list(db, competitive_group=competitive_group, skip=skip, limit=limit)
+def read_competitive_group_applications_list(
+    competitive_group: int = None,
+    skip: int = 0,
+    limit: int = 40000,
+    db: Session = Depends(get_db),
+):
+    data = crud.get_competitive_group_applications_list(
+        db, competitive_group=competitive_group, skip=skip, limit=limit
+    )
     return data
 
 
-@app.get("/api/minio/sign")
-def minio_sign(bucket: str, minio_id: str, db: Session = Depends(get_db)):
-    file_name = download(bucket, minio_id)
-    file_name_sign = sign_file(file_name)
-    minio_id_sign = upload(bucket, minio_id, file_name_sign)
+@app.post("/api/minio/sign")
+def sign_and_upload_back_to_minio(path: MinioPath) -> Dict[str, str]:
+    """
+    Подписать файл из Minio и выгрузить подпись рядом с файлом.
+    """
+    file_name = utils.loading.download(path.bucket_name, path.id_minio)
+    file_name_sign = utils.signer.sign_file(file_name)
+    app.logger.error(file_name_sign)
+    minio_id_sign = utils.loading.upload(
+        path.bucket_name, path.id_minio, file_name_sign
+    )
     return minio_id_sign
+
+
+@app.get("/moby_balance")
+def get_available_balance():
+    """
+    Получить баланс.
+    """
+    data = get_balance()
+
+    return data
+
+
+@app.get("/moby_number_available")
+def get_number_available_sms():
+    """
+    Получить количество доступных СМС для отправки.
+    """
+    data = get_number_available()
+
+    return data
+
+
+@app.get("/moby")
+def send_sms_to_phone(phone: str, text: str):
+    """
+    Отправить сообщение адресату ("GET" API).
+    """
+    data = send_sms(phone, text)
+    data_parsed = str(data.get("id_sms")) if data.get("id_sms", False) else data.get("msg")
+
+    return data_parsed
+
+
+@app.post("/moby_state")
+def get_sms_state_by_id(id_sms: int):
+    """
+    Получить статус SMS.
+    """
+    data = get_sms_state(id_sms)
+    data_parsed = data.get("status") if data.get("status", False) else data.get("msg")
+
+    return data_parsed

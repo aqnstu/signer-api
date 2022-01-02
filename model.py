@@ -40,3 +40,8 @@ class Status(BaseModel):
     pk: int
     is_processed: int
     err_msg: str
+
+
+class MinioPath(BaseModel):
+    bucket_name: str
+    id_minio: str
