@@ -91,7 +91,7 @@ def send_xlsx(stored_proc: str, filter_str: str, params: str, columns: str, user
     :param sid: ид сессии
     :return:
     """
-    params = params.split(',')
+    params = params.strip().split(',')
     if params == ['']:
         params = []
     res = get_from_grid(stored_proc,
