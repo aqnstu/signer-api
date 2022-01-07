@@ -14,8 +14,7 @@ from model import (
     Application,
     EpguDocument,
     EpguAchievement,
-    Status,
-    MinioPath,
+    Status
 )
 from sms.sms import get_balance, get_number_available, send_sms, get_sms_state
 from utils.decorators import get_original_docstring
