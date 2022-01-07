@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from minio import Minio
 import io
-from utils.signer import sign_file
 import os
 
 from configs.minio import MINIO
@@ -44,7 +43,6 @@ def upload(bucket: str, minio_id: str, file_name_sign: str) -> dict:
     value_as_bytes = open(os.path.join("files", "minio", file_name_sign), "rb").read()
     value_as_a_stream = io.BytesIO(value_as_bytes)
     src_catalog = minio_id.split("/")[0]
-
     new_mino_id = "/".join([src_catalog, file_name_sign])
     try:
         client.put_object(
@@ -58,13 +56,3 @@ def upload(bucket: str, minio_id: str, file_name_sign: str) -> dict:
     except Exception as e:
         return {"error": str(e)}
 
-
-if __name__ == '__main__':
-    bucket = 'secdepresult'
-    minio_id = '129/orlov_svedeniya_o_prieme.pdf'
-    file_name = download(bucket, minio_id)
-    print(file_name)
-    file_name_sign = sign_file(file_name)
-    print(file_name_sign)
-    minio_id_sign = upload(bucket, minio_id, file_name_sign)
-    print(minio_id_sign)
