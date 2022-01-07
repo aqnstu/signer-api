@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from fastapi import Depends, FastAPI, HTTPException
+import sentry_sdk
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sqlalchemy.orm import Session
-from typing import Dict, List
+from typing import Dict
 
+from configs.sentry import SENTRY
 from db import crud
 from db.database import SessionLocal, send_xlsx
 from logger import CustomizeLogger
@@ -22,12 +25,13 @@ import utils.loading
 import utils.signer
 
 
-
 def create_app() -> FastAPI:
     """
     Создать приложение FastAPI.
     """
+    sentry_sdk.init(**SENTRY)
     app = FastAPI(title="Signer API", debug=False)
+    app.add_middleware(SentryAsgiMiddleware)
     logger = CustomizeLogger.make_logger()
     app.logger = logger
 
@@ -54,8 +58,7 @@ def root() -> Dict[str, str]:
     Домашняя страница :)
     """
     return {
-        "message": "API для подписи и получения"
-        "данных для работы с суперсервисом [Поступи онлайн]"
+        "message": "API для прочих нужд. Документация по пути: /docs или /redoc"
     }
 
 
@@ -357,4 +360,3 @@ def get_send_xlsx(stored_proc: str, filter_str: str, params: str, columns: str, 
     # получаем адрес электронной почты
     # отправляем файл на этот адрес
     send_xlsx(stored_proc, filter_str, params, columns, userid, sid)
-
