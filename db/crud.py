@@ -4,31 +4,29 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 
-def get_subdivision_org(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.t_vw_ss_subdivisionorg_2021).offset(skip).limit(limit).all()
-
-
-def get_education_program(db: Session, skip: int = 0, limit: int = 100):
-    return (
-        db.query(models.t_vw_ss_educationprogram_2021).offset(skip).limit(limit).all()
-    )
+def get_org_direction(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.t_vw_ss_orgdirection).offset(skip).limit(limit).all()
 
 
 def get_campaign(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.t_vw_ss_campaign_2021).offset(skip).limit(limit).all()
+    return db.query(models.t_campaign).offset(skip).limit(limit).all()
 
 
-def get_cmp_achievement(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.t_ss_cmpachievement).offset(skip).limit(limit).all()
+def get_terms_admission(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.t_vw_ss_termsadmission).offset(skip).limit(limit).all()
 
 
-def get_admission_volume(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.t_vw_ss_admissionvolume_2021).offset(skip).limit(limit).all()
+def get_campaign_achievement(db: Session, skip: int = 0, limit: int = 250):
+    return db.query(models.t_vw_ss_achievments).offset(skip).limit(limit).all()
 
 
-def get_distributed_admission_volume(db: Session, skip: int = 0, limit: int = 100):
+def get_admission_volume(db: Session, skip: int = 0, limit: int = 500):
+    return db.query(models.t_vw_ss_admissionvolume_2022).offset(skip).limit(limit).all()
+
+
+def get_distributed_admission_volume(db: Session, skip: int = 0, limit: int = 500):
     return (
-        db.query(models.t_vw_ss_distadmissionvolume_2021)
+        db.query(models.t_vw_ss_distadmissionvolume_2022)
         .offset(skip)
         .limit(limit)
         .all()
@@ -37,29 +35,17 @@ def get_distributed_admission_volume(db: Session, skip: int = 0, limit: int = 10
 
 def get_competitive_group(db: Session, skip: int = 0, limit: int = 100):
     return (
-        db.query(models.t_vw_ss_competitivegroup_2021).offset(skip).limit(limit).all()
+        db.query(models.t_vw_ss_competitivegroup_2022).offset(skip).limit(limit).all()
     )
 
 
-def get_competitive_group_program(db: Session, skip: int = 0, limit: int = 100):
-    return (
-        db.query(models.t_vw_ss_competitivegrouppr_2021).offset(skip).limit(limit).all()
-    )
-
-
-def get_competitive_benefit(db: Session, skip: int = 0, limit: int = 100):
-    return (
-        db.query(models.t_vw_ss_competitivebenefit_2021).offset(skip).limit(limit).all()
-    )
-
-
-def get_entrance_test(db: Session, skip: int = 0, limit: int = 100, stage: int = 1):
+def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int = 1):
     if stage == 1:
         return (
-            db.query(models.t_vw_ss_entrancetest_2021)
+            db.query(models.t_vw_ss_entrancetest_2022)
             .filter(
-                models.t_vw_ss_entrancetest_2021.c.IsEge == 1,
-                models.t_vw_ss_entrancetest_2021.c.UIDReplaceEntranceTest == None,
+                models.t_vw_ss_entrancetest_2022.c.isege == 1,
+                models.t_vw_ss_entrancetest_2022.c.uidreplaceentrancetest == None,
             )
             .offset(skip)
             .limit(limit)
@@ -67,10 +53,10 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 100, stage: int =
         )
     if stage == 2:
         return (
-            db.query(models.t_vw_ss_entrancetest_2021)
+            db.query(models.t_vw_ss_entrancetest_2022)
             .filter(
-                models.t_vw_ss_entrancetest_2021.c.IsEge == 1,
-                models.t_vw_ss_entrancetest_2021.c.UIDReplaceEntranceTest != None,
+                models.t_vw_ss_entrancetest_2022.c.isege == 1,
+                models.t_vw_ss_entrancetest_2022.c.uidreplaceentrancetest != None,
             )
             .offset(skip)
             .limit(limit)
@@ -78,29 +64,16 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 100, stage: int =
         )
     if stage == 3:
         return (
-            db.query(models.t_vw_ss_entrancetest_2021)
-            .filter(models.t_vw_ss_entrancetest_2021.c.IsEge == 0)
+            db.query(models.t_vw_ss_entrancetest_2022)
+            .filter(models.t_vw_ss_entrancetest_2022.c.isege == 0)
             .offset(skip)
             .limit(limit)
             .all()
         )
 
 
-def get_entrance_test_benefit(db: Session, skip: int = 0, limit: int = 100):
-    return (
-        db.query(models.t_vw_ss_entrancetestbenefit_2021)
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
-
-
-def get_entrance_test_location(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.t_vw_ss_entrancetestloc_2021).offset(skip).limit(limit).all()
-
-
-def get_terms_admission(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.t_ss_termsadmission).offset(skip).limit(limit).all()
+# def get_entrance_test_location(db: Session, skip: int = 0, limit: int = 100):
+#     return db.query(models.t_vw_ss_entrancetestloc_2021).offset(skip).limit(limit).all()
 
 
 def get_epgu_application(db: Session, skip: int = 0, limit: int = 100):

@@ -852,7 +852,7 @@ class SsEntityType(Base):
     __tablename__ = 'ss_entity_type'
     __table_args__ = {'schema': 'abituser'}
 
-    id = Column(NUMBER(asdecimal=False), primary_key=True)
+    id = Column(NUMBER(asdecimal=True), primary_key=True)
     name = Column(VARCHAR(512), nullable=False)
 
 
@@ -860,11 +860,11 @@ class SsEpguapplication(Base):
     __tablename__ = 'ss_epguapplication'
     __table_args__ = {'schema': 'abituser'}
 
-    pk = Column(NUMBER(asdecimal=False), primary_key=True)
+    pk = Column(NUMBER(asdecimal=True), primary_key=True)
     epgu_id = Column(VARCHAR(128))
     json = Column(Text)
     date_add = Column(DateTime, nullable=False, server_default=text("sysdate "))
-    is_accepted = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0 "))
+    is_accepted = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0 "))
     date_accept = Column(DateTime)
     remark = Column(VARCHAR(4000))
     id_ss_entity_type = Column(ForeignKey('abituser.ss_entity_type.id'), nullable=False)
@@ -910,7 +910,7 @@ class SsEpgudocument(Base):
     epgu_id = Column(VARCHAR(128), nullable=False)
     json = Column(Text)
     date_add = Column(DateTime, nullable=False, server_default=text("sysdate "))
-    is_accepted = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0 "))
+    is_accepted = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0 "))
     date_accept = Column(DateTime)
     remark = Column(VARCHAR(4000))
     id_ss_documenttype = Column(ForeignKey('abituser.ss_documenttypes.id'), nullable=False)
@@ -932,20 +932,20 @@ class SsEpguachievement(Base):
     __tablename__ = 'ss_epguachievement'
     __table_args__ = {'schema': 'abituser'}
 
-    pk = Column(NUMBER(asdecimal=False), primary_key=True)
+    pk = Column(NUMBER(asdecimal=True), primary_key=True)
     epgu_id = Column(VARCHAR(128), nullable=False)
     json = Column(Text)
     date_add = Column(DateTime, nullable=False, server_default=text("sysdate "))
-    is_accepted = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0       "))
+    is_accepted = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0       "))
     date_accept = Column(DateTime)
     remark = Column(VARCHAR(4000))
     id_ss_category = Column(ForeignKey('abituser.ss_achievementcategories.id'), nullable=False)
-    epgu_application_id = Column(NUMBER(asdecimal=False))
+    epgu_application_id = Column(NUMBER(asdecimal=True))
     id_jwt = Column(Integer)
 
     ss_achievementcategory = relationship('SsAchievementcategory')
 
- 
+
 t_vw_ss_comp_applist_2021 = Table(
     'vw$ss_comp_applist_2021', metadata,
     Column('UIDCompetitiveGroup', NUMBER(asdecimal=True)),
@@ -975,5 +975,146 @@ t_vw_ss_comp_applist_2021 = Table(
     Column('Enlisted', NUMBER(asdecimal=True)),
     Column('WithoutTests', CHAR(4)),
     Column('ReasonWithoutTests', CHAR(61)),
+    schema='abituser'
+)
+
+
+t_campaign = Table(
+    'campaign', metadata,
+    Column('uid', NUMBER(asdecimal=True)),
+    Column('name', VARCHAR(300)),
+    Column('yearstart', NUMBER(asdecimal=True)),
+    Column('yearend', NUMBER(asdecimal=True)),
+    Column('idcampaigntype', NUMBER(asdecimal=True)),
+    Column('idcampaignstatus', NUMBER(asdecimal=True)),
+    Column('maxcountachievements', NUMBER(asdecimal=True)),
+    Column('numberagree', NUMBER(asdecimal=True)),
+    Column('countdirections', NUMBER(asdecimal=True)),
+    Column('ideducationform1', NUMBER(asdecimal=True)),
+    Column('ideducationform2', NUMBER(asdecimal=True)),
+    Column('ideducationform3', NUMBER(asdecimal=True)),
+    Column('ideducationlevel1', NUMBER(asdecimal=True)),
+    Column('ideducationlevel2', NUMBER(asdecimal=True)),
+    Column('enddate', VARCHAR(26)),
+    schema='abituser'
+)
+
+
+t_vw_ss_achievments = Table(
+    'vw$ss_achievments', metadata,
+    Column('uid', VARCHAR(41)),
+    Column('uidcampaign', NUMBER(asdecimal=True)),
+    Column('idcategory', NUMBER(asdecimal=True)),
+    Column('idachievementtype', NUMBER(asdecimal=True)),
+    Column('name', VARCHAR(256)),
+    Column('maxvalue', NUMBER(asdecimal=True)),
+    schema='abituser'
+)
+
+
+t_vw_ss_admissionvolume_2022 = Table(
+    'vw$ss_admissionvolume_2022', metadata,
+    Column('uid', NUMBER(asdecimal=True)),
+    Column('uidcampaign', NUMBER(asdecimal=True)),
+    Column('iddirection', NUMBER(19, 0, False)),
+    Column('ideducationlevel', NUMBER(asdecimal=True)),
+    Column('name', VARCHAR(4000)),
+    Column('budgeto', NUMBER(asdecimal=True)),
+    Column('budgetoz', NUMBER(asdecimal=True)),
+    Column('budgetz', NUMBER(asdecimal=True)),
+    Column('quotao', NUMBER(asdecimal=True)),
+    Column('quotaoz', NUMBER(asdecimal=True)),
+    Column('quotaz', NUMBER(asdecimal=True)),
+    Column('paido', NUMBER(asdecimal=True)),
+    Column('paidoz', NUMBER(asdecimal=True)),
+    Column('paidz', NUMBER(asdecimal=True)),
+    Column('targeto', NUMBER(asdecimal=True)),
+    Column('targetoz', NUMBER(asdecimal=True)),
+    Column('targetz', NUMBER(asdecimal=True)),
+    schema='abituser'
+)
+
+
+t_vw_ss_competitivegroup_2022 = Table(
+    'vw$ss_competitivegroup_2022', metadata,
+    Column('uid', NUMBER(asdecimal=True)),
+    Column('uidcampaign', NUMBER(asdecimal=True)),
+    Column('name', VARCHAR(801)),
+    Column('idlevelbudget', NUMBER(asdecimal=True)),
+    Column('ideducationlevel', NUMBER(asdecimal=True)),
+    Column('ideducationsource', NUMBER(asdecimal=True)),
+    Column('ideducationform', NUMBER(asdecimal=True)),
+    Column('uidorgdirection', NUMBER(10, 0, False)),
+    Column('admissionnumber', NUMBER(asdecimal=True)),
+    Column('allowedwithoutdocuments', NUMBER(asdecimal=True)),
+    Column('comment', VARCHAR(522)),
+    Column('idstage', NUMBER(asdecimal=True)),
+    Column('fk_competition', NUMBER(asdecimal=True)),
+    schema='abituser'
+)
+
+
+t_vw_ss_distadmissionvolume_2022 = Table(
+    'vw$ss_distadmissionvolume_2022', metadata,
+    Column('uid', NUMBER(asdecimal=True)),
+    Column('uidadmissionvolume', NUMBER(asdecimal=True)),
+    Column('iddirection', NUMBER(19, 0, False)),
+    Column('idlevelbudget', NUMBER(asdecimal=True)),
+    Column('name', VARCHAR(4000)),
+    Column('budgeto', NUMBER(asdecimal=True)),
+    Column('budgetoz', NUMBER(asdecimal=True)),
+    Column('budgetz', NUMBER(asdecimal=True)),
+    Column('quotao', NUMBER(asdecimal=True)),
+    Column('quotaoz', NUMBER(asdecimal=True)),
+    Column('quotaz', NUMBER(asdecimal=True)),
+    Column('paido', NUMBER(asdecimal=True)),
+    Column('paidoz', NUMBER(asdecimal=True)),
+    Column('paidz', NUMBER(asdecimal=True)),
+    Column('targeto', NUMBER(asdecimal=True)),
+    Column('targetoz', NUMBER(asdecimal=True)),
+    Column('targetz', NUMBER(asdecimal=True)),
+    schema='abituser'
+)
+
+
+t_vw_ss_entrancetest_2022 = Table(
+    'vw$ss_entrancetest_2022', metadata,
+    Column('uid', NUMBER(asdecimal=True)),
+    Column('uidcompetitivegroup', NUMBER(asdecimal=True)),
+    Column('fk_competition', NUMBER(asdecimal=True)),
+    Column('identrancetesttype', NUMBER(19, 0, False)),
+    Column('testname', VARCHAR(256)),
+    Column('isege', NUMBER(asdecimal=True)),
+    Column('minscore', NUMBER(asdecimal=True)),
+    Column('maxscore', NUMBER(asdecimal=True)),
+    Column('priority', NUMBER(asdecimal=True)),
+    Column('idsubject', NUMBER(19, 0, False)),
+    Column('uidreplaceentrancetest', NUMBER(asdecimal=True)),
+    Column('idlanguage1', NUMBER(asdecimal=True)),
+    Column('idlanguage2', NUMBER(asdecimal=True)),
+    Column('idlanguage3', NUMBER(asdecimal=True)),
+    Column('isspo', NUMBER(asdecimal=True)),
+    Column('isforeigner', NUMBER(asdecimal=True)),
+    schema='abituser'
+)
+
+
+t_vw_ss_orgdirection = Table(
+    'vw$ss_orgdirection', metadata,
+    Column('uid', NUMBER(10, 0, False), nullable=False),
+    Column('iddirection', NUMBER(19, 0, False)),
+    Column('name', VARCHAR(4000)),
+    Column('keys_plus', VARCHAR(8)),
+    schema='abituser'
+)
+
+
+t_vw_ss_termsadmission = Table(
+    'vw$ss_termsadmission', metadata,
+    Column('uidcampaign', NUMBER(asdecimal=True)),
+    Column('uid', NUMBER(asdecimal=True), nullable=False),
+    Column('idtermslfs', NUMBER(19, 0, False)),
+    Column('startevent', VARCHAR(26)),
+    Column('endevent', VARCHAR(26)),
     schema='abituser'
 )
