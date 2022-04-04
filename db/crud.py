@@ -33,7 +33,7 @@ def get_distributed_admission_volume(db: Session, skip: int = 0, limit: int = 50
     )
 
 
-def get_competitive_group(db: Session, skip: int = 0, limit: int = 100):
+def get_competitive_group(db: Session, skip: int = 0, limit: int = 500):
     return (
         db.query(models.t_vw_ss_competitivegroup_2022).offset(skip).limit(limit).all()
     )

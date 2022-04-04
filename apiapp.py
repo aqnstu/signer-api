@@ -126,7 +126,7 @@ def read_distributed_admission_volume(
 
 @app.get("/api/db/get-competitive-group")
 def read_competitive_group(
-    skip: int = 0, limit: int = 200, db: Session = Depends(get_db)
+    skip: int = 0, limit: int = 500, db: Session = Depends(get_db)
 ):
     data = crud.get_competitive_group(db, skip=skip, limit=limit)
     return data
