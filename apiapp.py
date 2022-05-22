@@ -483,10 +483,10 @@ def read_epgu_target_organization(
     return data
 
 
-@app.post("/api/db/insert-into-epgu-target-organization")
-def create_record_epgu_target_organization(doc: model.EpguTargetOrganization, db: Session = Depends(get_db)):
+@app.post("/api/db/insert-into-epgu-target-contract")
+def create_record_epgu_target_contract(doc: model.EpguTargetContract, db: Session = Depends(get_db)):
     try:
-        data = crud.insert_into_epgu_target_organization(
+        data = crud.insert_into_epgu_target_contract(
             db,
             id=doc.id,
             data_json=doc.data_json,
@@ -498,10 +498,4 @@ def create_record_epgu_target_organization(doc: model.EpguTargetOrganization, db
         app.logger.error(e)
         data = None
         raise HTTPException(status_code=500, detail="DB error")
-    return data
-
-
-@app.post("/api/db/test")
-def test(db: Session = Depends(get_db)):
-    data = crud.test(db)
     return data

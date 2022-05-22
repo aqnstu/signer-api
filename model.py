@@ -69,7 +69,7 @@ class EpguPhoto(BaseModel):
     uid_epgu: str
 
 
-class EpguTargetOrganization(BaseModel):
+class EpguTargetContract(BaseModel):
     id: int
     data_json: str
     user_guid: str

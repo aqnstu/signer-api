@@ -396,7 +396,7 @@ def get_epgu_target_organization(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.SsoTargetContract).offset(skip).limit(limit).all()
 
 
-def insert_into_epgu_target_organization(
+def insert_into_epgu_target_contract(
     db: Session,
     id: str,
     data_json: str,
