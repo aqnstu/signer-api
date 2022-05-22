@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.orm import Session
 
-from . import models, schemas
+from . import models
 
 
 def get_org_direction(db: Session, skip: int = 0, limit: int = 100):
@@ -76,10 +76,6 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
 #     return db.query(models.t_vw_ss_entrancetestloc_2021).offset(skip).limit(limit).all()
 
 
-def get_epgu_application(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.SsEpguapplication).offset(skip).limit(limit).all()
-
-
 def insert_into_epgu_application(
     db: Session,
     appnumber: int,
@@ -127,50 +123,25 @@ def get_epgu_document(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.SsEpgudocument).offset(skip).limit(limit).all()
 
 
-def insert_into_epgu_document(
-    db: Session,
-    user_guid: str,
-    appnumber: int,
-    id_jwt_epgu: int,
-    json_data: str,
-    id_documenttype: int,
-):
-    row = models.SsEpgudocument(
-        epgu_id=user_guid,
-        epgu_application_id=appnumber,
-        id_jwt=id_jwt_epgu,
-        json=json_data,
-        id_ss_documenttype=id_documenttype,
-    )
-    db.add(row)
-    db.commit()
-    db.refresh(row)
-    return row
-
-
-def get_epgu_achievement(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.SsEpguachievement).offset(skip).limit(limit).all()
-
-
-def insert_into_epgu_achievement(
-    db: Session,
-    user_guid: str,
-    appnumber: int,
-    id_jwt_epgu: int,
-    json_data: str,
-    id_category: int,
-):
-    row = models.SsEpguachievement(
-        epgu_id=user_guid,
-        epgu_application_id=appnumber,
-        id_jwt=id_jwt_epgu,
-        json=json_data,
-        id_ss_category=id_category,
-    )
-    db.add(row)
-    db.commit()
-    db.refresh(row)
-    return row
+# def insert_into_epgu_achievement(
+#     db: Session,
+#     user_guid: str,
+#     appnumber: int,
+#     id_jwt_epgu: int,
+#     json_data: str,
+#     id_category: int,
+# ):
+#     row = models.SsEpguachievement(
+#         epgu_id=user_guid,
+#         epgu_application_id=appnumber,
+#         id_jwt=id_jwt_epgu,
+#         json=json_data,
+#         id_ss_category=id_category,
+#     )
+#     db.add(row)
+#     db.commit()
+#     db.refresh(row)
+#     return row
 
 
 def get_competitive_group_applications_list(
@@ -194,3 +165,265 @@ def get_competitive_group_applications_list(
             .limit(limit)
             .all()
         )
+
+
+"""#############2022##############"""
+
+
+def get_epgu_jwt(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.SsoJwtEpgu).offset(skip).limit(limit).all()
+
+
+def insert_into_epgu_jwt(
+    db: Session,
+    id: str,
+    id_datatype: int,
+    data_json: str,
+    user_guid: str,
+    app_number: str,
+):
+    if (
+        not db.query(models.SsoJwtEpgu)
+        .filter(
+            models.SsoJwtEpgu.user_guid == user_guid,
+            models.SsoJwtEpgu.app_number == app_number,
+        )
+        .one_or_none()
+    ):
+        row = models.SsoJwtEpgu(
+            id=id,
+            id_datatype=id_datatype,
+            data_json=data_json,
+            user_guid=user_guid,
+            app_number=app_number,
+        )
+        db.add(row)
+    else:
+        db.query(models.SsoJwtEpgu).filter(
+            models.SsoJwtEpgu.user_guid == user_guid,
+            models.SsoJwtEpgu.app_number == app_number,
+        ).update({models.SsoJwtEpgu.data_json: data_json})
+    db.commit()
+
+
+def get_epgu_achievement(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.SsoAchievement).offset(skip).limit(limit).all()
+
+
+def insert_into_epgu_achievement(
+    db: Session,
+    id: str,
+    id_jwt_epgu: int,
+    data_json: str,
+    app_number: str,
+    uid_epgu: int,
+    id_category: int,
+):
+    if (
+        not db.query(models.SsoAchievement)
+        .filter(
+            models.SsoAchievement.app_number == app_number,
+            models.SsoAchievement.uid_epgu == uid_epgu,
+        )
+        .one_or_none()
+    ):
+        row = models.SsoAchievement(
+            id=id,
+            id_jwt_epgu=id_jwt_epgu,
+            data_json=data_json,
+            app_number=app_number,
+            uid_epgu=uid_epgu,
+            id_category=id_category,
+        )
+        db.add(row)
+    else:
+        db.query(models.SsoAchievement).filter(
+            models.SsoAchievement.app_number == app_number,
+            models.SsoAchievement.uid_epgu == uid_epgu,
+        ).update({models.SsoAchievement.data_json: data_json})
+    db.commit()
+
+
+def get_epgu_benefit(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.SsoBenefit).offset(skip).limit(limit).all()
+
+
+def insert_into_epgu_benefit(
+    db: Session,
+    id: str,
+    id_jwt_epgu: int,
+    data_json: str,
+    app_number: str,
+    uid_epgu: int,
+    id_benefit: int,
+):
+    if (
+        not db.query(models.SsoBenefit)
+        .filter(
+            models.SsoBenefit.app_number == app_number,
+            models.SsoBenefit.uid_epgu == uid_epgu,
+        )
+        .one_or_none()
+    ):
+        row = models.SsoBenefit(
+            id=id,
+            id_jwt_epgu=id_jwt_epgu,
+            data_json=data_json,
+            app_number=app_number,
+            uid_epgu=uid_epgu,
+            id_benefit=id_benefit,
+        )
+        db.add(row)
+    else:
+        db.query(models.SsoBenefit).filter(
+            models.SsoBenefit.app_number == app_number,
+            models.SsoBenefit.uid_epgu == uid_epgu,
+        ).update({models.SsoBenefit.data_json: data_json})
+
+    db.commit()
+
+
+def get_epgu_doc(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.SsoDoc).offset(skip).limit(limit).all()
+
+
+def insert_into_epgu_doc(
+    db: Session,
+    id: str,
+    data_json: str,
+    user_guid: str,
+    uid_epgu: int,
+    id_document_version: int,
+):
+    if (
+        not db.query(models.SsoDoc)
+        .filter(
+            models.SsoDoc.user_guid == user_guid,
+            models.SsoDoc.uid_epgu == uid_epgu,
+        )
+        .one_or_none()
+    ):
+        row = models.SsoDoc(
+            id=id,
+            data_json=data_json,
+            user_guid=user_guid,
+            uid_epgu=uid_epgu,
+            id_document_version=id_document_version,
+        )
+        db.add(row)
+    else:
+        db.query(models.SsoDoc).filter(
+            models.SsoDoc.user_guid == user_guid,
+            models.SsoDoc.uid_epgu == uid_epgu,
+        ).update({models.SsoDoc.data_json: data_json})
+
+    db.commit()
+
+
+def get_epgu_identification(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.SsoIdentification).offset(skip).limit(limit).all()
+
+
+def insert_into_epgu_identification(
+    db: Session,
+    id: str,
+    data_json: str,
+    user_guid: str,
+    uid_epgu: int,
+    id_document_type: int,
+):
+    if (
+        not db.query(models.SsoIdentification)
+        .filter(
+            models.SsoIdentification.user_guid == user_guid,
+            models.SsoIdentification.uid_epgu == uid_epgu,
+        )
+        .one_or_none()
+    ):
+        row = models.SsoIdentification(
+            id=id,
+            data_json=data_json,
+            user_guid=user_guid,
+            uid_epgu=uid_epgu,
+            id_document_type=id_document_type,
+        )
+        db.add(row)
+    else:
+        db.query(models.SsoIdentification).filter(
+            models.SsoIdentification.user_guid == user_guid,
+            models.SsoIdentification.uid_epgu == uid_epgu,
+        ).update({models.SsoIdentification.data_json: data_json})
+
+    db.commit()
+
+
+def get_epgu_photo(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.SsoPhoto).offset(skip).limit(limit).all()
+
+
+def insert_into_epgu_photo(
+    db: Session,
+    id: str,
+    data_json: str,
+    user_guid: str,
+    uid_epgu: int,
+):
+    if (
+        not db.query(models.SsoPhoto)
+        .filter(
+            models.SsoPhoto.user_guid == user_guid,
+            models.SsoPhoto.uid_epgu == uid_epgu,
+        )
+        .one_or_none()
+    ):
+        row = models.SsoPhoto(
+            id=id,
+            data_json=data_json,
+            user_guid=user_guid,
+            uid_epgu=uid_epgu,
+        )
+        db.add(row)
+    else:
+        db.query(models.SsoPhoto).filter(
+            models.SsoPhoto.user_guid == user_guid,
+            models.SsoPhoto.uid_epgu == uid_epgu,
+        ).update({models.SsoPhoto.data_json: data_json})
+
+    db.commit()
+
+
+def get_epgu_target_organization(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.SsoTargetContract).offset(skip).limit(limit).all()
+
+
+def insert_into_epgu_target_organization(
+    db: Session,
+    id: str,
+    data_json: str,
+    user_guid: str,
+    uid_epgu: int,
+    uid_target_organization: int,
+):
+    if (
+        not db.query(models.SsoTargetContract)
+        .filter(
+            models.SsoTargetContract.user_guid == user_guid,
+            models.SsoTargetContract.uid_epgu == uid_epgu,
+        )
+        .one_or_none()
+    ):
+        row = models.SsoTargetContract(
+            id=id,
+            data_json=data_json,
+            user_guid=user_guid,
+            uid_epgu=uid_epgu,
+            uid_target_organization=uid_target_organization,
+        )
+        db.add(row)
+    else:
+        db.query(models.SsoTargetContract).filter(
+            models.SsoTargetContract.user_guid == user_guid,
+            models.SsoTargetContract.uid_epgu == uid_epgu,
+        ).update({models.SsoTargetContract.data_json: data_json})
+
+    db.commit()

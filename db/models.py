@@ -1,5 +1,7 @@
 # coding: utf-8
-from sqlalchemy import CHAR, Column, DateTime, Integer, Table, Text, VARCHAR, text, ForeignKey
+from sqlalchemy import CHAR, Column, DateTime, Integer, \
+    Table, Text, VARCHAR, text, \
+    ForeignKey, Index, TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.oracle import NUMBER
 from sqlalchemy.ext.declarative import declarative_base
@@ -919,6 +921,7 @@ class SsEpgudocument(Base):
 
     ss_documenttype = relationship('SsDocumenttype')
 
+
 class SsAchievementcategory(Base):
     __tablename__ = 'ss_achievementcategories'
     __table_args__ = {'schema': 'abituser', 'comment': 'Категории индивидуальных достижений'}
@@ -1118,3 +1121,125 @@ t_vw_ss_termsadmission = Table(
     Column('endevent', VARCHAR(26)),
     schema='abituser'
 )
+
+
+"""#############2022##############"""
+
+
+class SsoDoc(Base):
+    __tablename__ = 'sso_doc'
+    __table_args__ = (
+        Index('sso_doc_guid_uid_uindex', 'user_guid', 'uid_epgu', unique=True),
+        {'schema': 'abituser'}
+    )
+
+    id = Column(Integer, primary_key=True)
+    data_json = Column(Text)
+    added = Column(TIMESTAMP, server_default=text("current_timestamp"))
+    user_guid = Column(VARCHAR(40))
+    uid_epgu = Column(VARCHAR(40))
+    id_document_version = Column(Integer, comment='Идентификатор версии документа заполняется из классификатора DocumentTypeVersionList')
+
+
+class SsoEpguDatatype(Base):
+    __tablename__ = 'sso_epgu_datatype'
+    __table_args__ = {'schema': 'abituser'}
+
+    id = Column(Integer, primary_key=True)
+    name = Column(VARCHAR(50))
+    description = Column(VARCHAR(100))
+    added = Column(TIMESTAMP, nullable=False, server_default=text("current_timestamp "))
+
+
+class SsoIdentification(Base):
+    __tablename__ = 'sso_identification'
+    __table_args__ = (
+        Index('sso_ident_guid_uid_uindex', 'user_guid', 'uid_epgu', unique=True),
+        {'schema': 'abituser'}
+    )
+
+    id = Column(Integer, primary_key=True)
+    data_json = Column(Text)
+    added = Column(TIMESTAMP, server_default=text("current_timestamp"))
+    user_guid = Column(VARCHAR(40))
+    uid_epgu = Column(VARCHAR(40))
+    id_document_type = Column(Integer, comment='Идентификатор записи справочника DocumentTypeList')
+
+
+class SsoPhoto(Base):
+    __tablename__ = 'sso_photo'
+    __table_args__ = (
+        Index('sso_photo_guid_uid_uindex', 'user_guid', 'uid_epgu', unique=True),
+        {'schema': 'abituser'}
+    )
+
+    id = Column(Integer, primary_key=True)
+    data_json = Column(Text)
+    added = Column(TIMESTAMP, server_default=text("current_timestamp"))
+    user_guid = Column(VARCHAR(40))
+    uid_epgu = Column(VARCHAR(40))
+
+
+class SsoTargetContract(Base):
+    __tablename__ = 'sso_target_contract'
+    __table_args__ = (
+        Index('sso_contract_guid_uid_uindex', 'user_guid', 'uid_epgu', unique=True),
+        {'schema': 'abituser'}
+    )
+
+    id = Column(Integer, primary_key=True)
+    data_json = Column(Text)
+    added = Column(TIMESTAMP, server_default=text("current_timestamp"))
+    user_guid = Column(VARCHAR(40))
+    uid_epgu = Column(VARCHAR(40))
+    uid_target_organization = Column(VARCHAR(40), comment='Идентификатор (Uid) сущности TargetOrganization')
+
+
+class SsoJwtEpgu(Base):
+    __tablename__ = 'sso_jwt_epgu'
+    __table_args__ = {'schema': 'abituser'}
+
+    id = Column(Integer, primary_key=True)
+    id_datatype = Column(ForeignKey('abituser.sso_epgu_datatype.id'))
+    data_json = Column(Text)
+    date_added = Column(TIMESTAMP, nullable=False, server_default=text("current_timestamp "))
+    user_guid = Column(VARCHAR(40))
+    app_number = Column(VARCHAR(40))
+
+    sso_epgu_datatype = relationship('SsoEpguDatatype')
+
+
+class SsoAchievement(Base):
+    __tablename__ = 'sso_achievement'
+    __table_args__ = (
+        Index('sso_ach_guid_uid_uindex', 'app_number', 'uid_epgu', unique=True),
+        {'schema': 'abituser'}
+    )
+
+    id = Column(Integer, primary_key=True)
+    id_jwt_epgu = Column(ForeignKey('abituser.sso_jwt_epgu.id'))
+    data_json = Column(Text)
+    added = Column(TIMESTAMP, server_default=text("current_timestamp"))
+    app_number = Column(VARCHAR(40))
+    uid_epgu = Column(VARCHAR(40))
+    id_category = Column(Integer, comment='Идентификатор записи справочника AchievementCategoryList')
+
+    sso_jwt_epgu = relationship('SsoJwtEpgu')
+
+
+class SsoBenefit(Base):
+    __tablename__ = 'sso_benefit'
+    __table_args__ = (
+        Index('sso_benefit_number_uid_uindex', 'app_number', 'uid_epgu', unique=True),
+        {'schema': 'abituser'}
+    )
+
+    id = Column(Integer, primary_key=True)
+    id_jwt_epgu = Column(ForeignKey('abituser.sso_jwt_epgu.id'))
+    data_json = Column(Text)
+    added = Column(TIMESTAMP, server_default=text("current_timestamp"))
+    app_number = Column(VARCHAR(40))
+    uid_epgu = Column(VARCHAR(40))
+    id_benefit = Column(Integer, comment='Идентификатор записи справочника BenefitList')
+
+    sso_jwt_epgu = relationship('SsoJwtEpgu')

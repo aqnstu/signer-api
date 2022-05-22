@@ -114,5 +114,3 @@ if __name__ == "__main__":
               "",
               '[{"FIELD": "SHORTNAME", "CAPTION": "Факультет"}, {"FIELD": "PK", "CAPTION": "Ид"}]',
               2, 1)
-
-

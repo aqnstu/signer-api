@@ -20,20 +20,61 @@ class Application(BaseModel):
     id_datatype: int
 
 
-class EpguDocument(BaseModel):
+class EpguJwt(BaseModel):
+    id: int
+    id_datatype: int
+    data_json: str
     user_guid: str
-    appnumber: int
-    id_jwt_epgu: int
-    json_data: str
-    id_documenttype: int
+    app_number: str
 
 
 class EpguAchievement(BaseModel):
-    user_guid: str
-    appnumber: int
+    id: int
     id_jwt_epgu: int
-    json_data: str
+    data_json: str
+    app_number: str
+    uid_epgu: str
     id_category: int
+
+
+class EpguBenefit(BaseModel):
+    id: int
+    id_jwt_epgu: int
+    data_json: str
+    app_number: str
+    uid_epgu: str
+    id_benefit: int
+
+
+class EpguDoc(BaseModel):
+    id: int
+    data_json: str
+    user_guid: str
+    uid_epgu: str
+    id_document_version: int
+
+
+class EpguIdentification(BaseModel):
+    id: int
+    data_json: str
+    user_guid: str
+    uid_epgu: str
+    id_document_type: int
+
+
+class EpguPhoto(BaseModel):
+    id: int
+    data_json: str
+    user_guid: str
+    uid_epgu: str
+
+
+class EpguTargetOrganization(BaseModel):
+    id: int
+    data_json: str
+    user_guid: str
+    uid_epgu: str
+    uid_target_organization: str
 
 
 class Status(BaseModel):

@@ -9,16 +9,7 @@ from configs.sentry import SENTRY
 from db import crud
 from db.database import SessionLocal, send_xlsx
 from logger import CustomizeLogger
-import logging.config
-from model import (
-    Document,
-    MinioPath,
-    String,
-    Application,
-    EpguDocument,
-    EpguAchievement,
-    Status
-)
+import model
 from sms.sms import get_balance, get_number_available, send_sms, get_sms_state
 from utils.decorators import get_original_docstring
 import utils.loading
@@ -63,7 +54,7 @@ def root() -> Dict[str, str]:
 
 
 @app.post("/api/utils/create-base64")
-def create_base64(s: String) -> Dict[str, str]:
+def create_base64(s: model.String) -> Dict[str, str]:
     """Получить строку Base64 из обычной строки."""
     data_base64 = utils.signer.to_base64_string(s.data)
     return {"data_base64": data_base64}
@@ -71,7 +62,7 @@ def create_base64(s: String) -> Dict[str, str]:
 
 @app.post("/api/utils/create-jwt")
 @get_original_docstring(utils.signer.get_jwt)
-def create_jwt(doc: Document) -> Dict[str, str]:
+def create_jwt(doc: model.Document) -> Dict[str, str]:
     jwt = utils.signer.get_jwt(header=doc.header, payload=doc.payload)
     return {"jwt": jwt}
 
@@ -145,7 +136,7 @@ def read_entrance_test(
 
 
 @app.post("/api/minio/sign")
-def sign_and_upload_back_to_minio(path: MinioPath) -> Dict[str, str]:
+def sign_and_upload_back_to_minio(path: model.MinioPath) -> Dict[str, str]:
     """
     Подписать файл из Minio и выгрузить подпись рядом с файлом.
     """
@@ -322,3 +313,195 @@ def get_send_xlsx(stored_proc: str, filter_str: str, params: str, columns: str, 
 #         db, competitive_group=competitive_group, skip=skip, limit=limit
 #     )
 #     return data
+
+
+"""#############2022##############"""
+
+
+@app.get("/api/db/get-epgu-jwt")
+def read_epgu_jwt(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    data = crud.get_epgu_jwt(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-epgu-jwt")
+def create_record_epgu_jwt(doc: model.EpguJwt, db: Session = Depends(get_db)):
+    try:
+        data = crud.insert_into_epgu_jwt(
+            db,
+            id=doc.id,
+            id_datatype=doc.id_datatype,
+            data_json=doc.data_json,
+            user_guid=doc.user_guid,
+            app_number=doc.app_number,
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
+        raise HTTPException(status_code=500, detail="DB error")
+    return data
+
+
+@app.get("/api/db/get-epgu-achievement")
+def read_epgu_achievement(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-epgu-achievement")
+def create_record_epgu_achievement(doc: model.EpguAchievement, db: Session = Depends(get_db)):
+    try:
+        data = crud.insert_into_epgu_achievement(
+            db,
+            id=doc.id,
+            id_jwt_epgu=doc.id_jwt_epgu,
+            data_json=doc.data_json,
+            app_number=doc.app_number,
+            uid_epgu=doc.uid_epgu,
+            id_category=doc.id_category
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
+        raise HTTPException(status_code=500, detail="DB error")
+    return data
+
+
+@app.get("/api/db/get-epgu-benefit")
+def read_epgu_benefit(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-epgu-benefit")
+def create_record_epgu_benefit(doc: model.EpguBenefit, db: Session = Depends(get_db)):
+    try:
+        data = crud.insert_into_epgu_benefit(
+            db,
+            id=doc.id,
+            id_jwt_epgu=doc.id_jwt_epgu,
+            data_json=doc.data_json,
+            app_number=doc.app_number,
+            uid_epgu=doc.uid_epgu,
+            id_benefit=doc.id_benefit
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
+        raise HTTPException(status_code=500, detail="DB error")
+    return data
+
+
+@app.get("/api/db/get-epgu-doc")
+def read_epgu_doc(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    data = crud.get_epgu_doc(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-epgu-doc")
+def create_record_epgu_doc(doc: model.EpguDoc, db: Session = Depends(get_db)):
+    try:
+        data = crud.insert_into_epgu_doc(
+            db,
+            id=doc.id,
+            data_json=doc.data_json,
+            user_guid=doc.user_guid,
+            uid_epgu=doc.uid_epgu,
+            id_document_version=doc.id_document_version
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
+        raise HTTPException(status_code=500, detail="DB error")
+    return data
+
+
+@app.get("/api/db/get-epgu-identification")
+def read_epgu_identification(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    data = crud.get_epgu_identification(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-epgu-identification")
+def create_record_epgu_identification(doc: model.EpguIdentification, db: Session = Depends(get_db)):
+    try:
+        data = crud.insert_into_epgu_identification(
+            db,
+            id=doc.id,
+            data_json=doc.data_json,
+            user_guid=doc.user_guid,
+            uid_epgu=doc.uid_epgu,
+            id_document_type=doc.id_document_type
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
+        raise HTTPException(status_code=500, detail="DB error")
+    return data
+
+
+@app.get("/api/db/get-epgu-photo")
+def read_epgu_photo(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    data = crud.get_epgu_photo(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-epgu-photo")
+def create_record_epgu_photo(doc: model.EpguPhoto, db: Session = Depends(get_db)):
+    try:
+        data = crud.insert_into_epgu_photo(
+            db,
+            id=doc.id,
+            data_json=doc.data_json,
+            user_guid=doc.user_guid,
+            uid_epgu=doc.uid_epgu,
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
+        raise HTTPException(status_code=500, detail="DB error")
+    return data
+
+
+@app.get("/api/db/get-epgu-target-organization")
+def read_epgu_target_organization(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    data = crud.get_epgu_target_organization(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-epgu-target-organization")
+def create_record_epgu_target_organization(doc: model.EpguTargetOrganization, db: Session = Depends(get_db)):
+    try:
+        data = crud.insert_into_epgu_target_organization(
+            db,
+            id=doc.id,
+            data_json=doc.data_json,
+            user_guid=doc.user_guid,
+            uid_epgu=doc.uid_epgu,
+            uid_target_organization=doc.uid_target_organization
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
+        raise HTTPException(status_code=500, detail="DB error")
+    return data
+
+
+@app.post("/api/db/test")
+def test(db: Session = Depends(get_db)):
+    data = crud.test(db)
+    return data
