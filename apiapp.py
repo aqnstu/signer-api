@@ -135,6 +135,14 @@ def read_entrance_test(
     return data
 
 
+@app.get("/api/db/get-entrance-test-location")
+def read_entrance_test_location(
+    skip: int = 0, limit: int = 5000, db: Session = Depends(get_db)
+):
+    data = crud.get_entrance_test_location(db, skip=skip, limit=limit)
+    return data
+
+
 @app.post("/api/minio/sign")
 def sign_and_upload_back_to_minio(path: model.MinioPath) -> Dict[str, str]:
     """

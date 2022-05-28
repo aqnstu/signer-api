@@ -42,14 +42,14 @@ def get_competitive_group(db: Session, skip: int = 0, limit: int = 500):
 def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int = 1):
     if stage == 1:
         return (
-            db.query(models.t_vw_ss_entrancetest_2022)
+            db.query(models.t_tvw_ss_entrancetest_2022)
             .filter(
-                models.t_vw_ss_entrancetest_2022.c.isege == 1,
-                models.t_vw_ss_entrancetest_2022.c.uidreplaceentrancetest == None,
+                models.t_tvw_ss_entrancetest_2022.c.isege == 1,
+                models.t_tvw_ss_entrancetest_2022.c.uidreplaceentrancetest == None,
             )
             .order_by(
-                models.t_vw_ss_entrancetest_2022.c.uidcompetitivegroup,
-                models.t_vw_ss_entrancetest_2022.c.priority
+                models.t_tvw_ss_entrancetest_2022.c.uidcompetitivegroup,
+                models.t_tvw_ss_entrancetest_2022.c.priority
             )
             .offset(skip)
             .limit(limit)
@@ -57,14 +57,14 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
         )
     if stage == 2:
         return (
-            db.query(models.t_vw_ss_entrancetest_2022)
+            db.query(models.t_tvw_ss_entrancetest_2022)
             .filter(
-                models.t_vw_ss_entrancetest_2022.c.isege == 1,
-                models.t_vw_ss_entrancetest_2022.c.uidreplaceentrancetest != None,
+                models.t_tvw_ss_entrancetest_2022.c.isege == 1,
+                models.t_tvw_ss_entrancetest_2022.c.uidreplaceentrancetest != None,
             )
             .order_by(
-                models.t_vw_ss_entrancetest_2022.c.uidcompetitivegroup,
-                models.t_vw_ss_entrancetest_2022.c.priority
+                models.t_tvw_ss_entrancetest_2022.c.uidcompetitivegroup,
+                models.t_tvw_ss_entrancetest_2022.c.priority
             )
             .offset(skip)
             .limit(limit)
@@ -72,13 +72,13 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
         )
     if stage == 3:
         return (
-            db.query(models.t_vw_ss_entrancetest_2022)
+            db.query(models.t_tvw_ss_entrancetest_2022)
             .filter(
-                models.t_vw_ss_entrancetest_2022.c.isege == 0
+                models.t_tvw_ss_entrancetest_2022.c.isege == 0
             )
             .order_by(
-                models.t_vw_ss_entrancetest_2022.c.uidcompetitivegroup,
-                models.t_vw_ss_entrancetest_2022.c.priority
+                models.t_tvw_ss_entrancetest_2022.c.uidcompetitivegroup,
+                models.t_tvw_ss_entrancetest_2022.c.priority
             )
             .offset(skip)
             .limit(limit)
@@ -86,8 +86,8 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
         )
 
 
-# def get_entrance_test_location(db: Session, skip: int = 0, limit: int = 100):
-#     return db.query(models.t_vw_ss_entrancetestloc_2021).offset(skip).limit(limit).all()
+def get_entrance_test_location(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.t_vw_ss_entrancetestlocation).offset(skip).limit(limit).all()
 
 
 def insert_into_epgu_application(

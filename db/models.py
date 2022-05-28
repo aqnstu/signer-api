@@ -1102,6 +1102,44 @@ t_vw_ss_entrancetest_2022 = Table(
 )
 
 
+t_tvw_ss_entrancetest_2022 = Table(
+    'tvw$ss_entrancetest_2022', metadata,
+    Column('uid', NUMBER(asdecimal=True)),
+    Column('uidcompetitivegroup', NUMBER(asdecimal=True)),
+    Column('fk_competition', NUMBER(asdecimal=True)),
+    Column('identrancetesttype', NUMBER(19, 0, True)),
+    Column('testname', VARCHAR(True)),
+    Column('isege', NUMBER(asdecimal=True)),
+    Column('minscore', NUMBER(asdecimal=True)),
+    Column('maxscore', NUMBER(asdecimal=True)),
+    Column('priority', NUMBER(asdecimal=True)),
+    Column('idsubject', NUMBER(19, 0, True)),
+    Column('uidreplaceentrancetest', NUMBER(asdecimal=True)),
+    Column('idlanguage1', NUMBER(asdecimal=True)),
+    Column('idlanguage2', NUMBER(asdecimal=True)),
+    Column('idlanguage3', NUMBER(asdecimal=True)),
+    Column('isspo', NUMBER(asdecimal=True)),
+    Column('isforeigner', NUMBER(asdecimal=True)),
+    Column('dt', DateTime, nullable=False, server_default=text("sysdate ")),
+    schema='abituser'
+)
+
+
+t_vw_ss_entrancetestlocation = Table(
+    'vw$ss_entrancetestlocation', metadata,
+    Column('Uid', VARCHAR(80)),
+    Column('uidentrancetest', NUMBER(asdecimal=False)),
+    Column('testdatestart', VARCHAR(532)),
+    Column('testdateend', VARCHAR(28)),
+    Column('testlocation', VARCHAR(36)),
+    Column('VisibleEpgu', NUMBER(asdecimal=False)),
+    Column('Url', CHAR(27)),
+    Column('entrantscount', NUMBER(asdecimal=False)),
+    Column('completingentrydate', CHAR(25)),
+    schema='abituser'
+)
+
+
 t_vw_ss_orgdirection = Table(
     'vw$ss_orgdirection', metadata,
     Column('uid', NUMBER(10, 0, False), nullable=False),
