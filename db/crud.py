@@ -47,6 +47,10 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
                 models.t_vw_ss_entrancetest_2022.c.isege == 1,
                 models.t_vw_ss_entrancetest_2022.c.uidreplaceentrancetest == None,
             )
+            .order_by(
+                models.t_vw_ss_entrancetest_2022.c.uidcompetitivegroup,
+                models.t_vw_ss_entrancetest_2022.c.priority
+            )
             .offset(skip)
             .limit(limit)
             .all()
@@ -58,6 +62,10 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
                 models.t_vw_ss_entrancetest_2022.c.isege == 1,
                 models.t_vw_ss_entrancetest_2022.c.uidreplaceentrancetest != None,
             )
+            .order_by(
+                models.t_vw_ss_entrancetest_2022.c.uidcompetitivegroup,
+                models.t_vw_ss_entrancetest_2022.c.priority
+            )
             .offset(skip)
             .limit(limit)
             .all()
@@ -65,7 +73,13 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
     if stage == 3:
         return (
             db.query(models.t_vw_ss_entrancetest_2022)
-            .filter(models.t_vw_ss_entrancetest_2022.c.isege == 0)
+            .filter(
+                models.t_vw_ss_entrancetest_2022.c.isege == 0
+            )
+            .order_by(
+                models.t_vw_ss_entrancetest_2022.c.uidcompetitivegroup,
+                models.t_vw_ss_entrancetest_2022.c.priority
+            )
             .offset(skip)
             .limit(limit)
             .all()
