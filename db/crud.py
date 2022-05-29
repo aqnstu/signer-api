@@ -111,28 +111,6 @@ def insert_into_epgu_application(
     return row
 
 
-def get_statuses_to(db: Session, skip: int = 0, limit: int = 100):
-    return (
-        db.query(models.SsStatusesTo)
-        .filter(models.SsStatusesTo.is_processed == 0)
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
-
-
-def update_into_statuses_to(
-    db: Session, pk: int, is_processed: int, err_msg: str = None
-):
-    db.query(models.SsStatusesTo).filter(models.SsStatusesTo.pk == pk).update(
-        {
-            models.SsStatusesTo.is_processed: is_processed,
-            models.SsStatusesTo.err_msg: err_msg,
-        }
-    )
-    db.commit()
-
-
 def get_epgu_document(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.SsEpgudocument).offset(skip).limit(limit).all()
 
@@ -440,4 +418,26 @@ def insert_into_epgu_target_contract(
             models.SsoTargetContract.uid_epgu == uid_epgu,
         ).update({models.SsoTargetContract.data_json: data_json})
 
+    db.commit()
+
+
+def get_statuses_to(db: Session, skip: int = 0, limit: int = 5000):
+    return (
+        db.query(models.SsStatusesTo)
+        .filter(models.SsStatusesTo.is_processed == 0)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+
+def update_into_statuses_to(
+    db: Session, pk: int, is_processed: int, err_msg: str = None
+):
+    db.query(models.SsStatusesTo).filter(models.SsStatusesTo.pk == pk).update(
+        {
+            models.SsStatusesTo.is_processed: is_processed,
+            models.SsStatusesTo.err_msg: err_msg,
+        }
+    )
     db.commit()

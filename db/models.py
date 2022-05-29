@@ -880,17 +880,16 @@ class SsStatusesTo(Base):
     __tablename__ = 'ss_statuses_to'
     __table_args__ = {'schema': 'abituser'}
 
-    pk = Column(NUMBER(asdecimal=True), primary_key=True)
-    epgu_id = Column(VARCHAR(128), nullable=False, comment='id на ЕПГУ')
-    id_ss_applicationstatuses = Column(ForeignKey('abituser.ss_applicationstatuses.id'), nullable=False, comment='статус')
-    date_add = Column(DateTime, nullable=False, server_default=text("sysdate "), comment='дата добавления в очередь')
-    is_processed = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0 "), comment='обработан ли, при ошибке -1')
-    date_process = Column(DateTime, comment='дата обработки')
-    err_msg = Column(VARCHAR(4000), comment='сообщение об ошибке')
-    epgu_application_id = Column(Integer)
-    remark = Column(VARCHAR(500))
-
-    ss_applicationstatus = relationship('SsApplicationstatus')
+    pk = Column(NUMBER(asdecimal=False), primary_key=True, unique=True)
+    epgu_id = Column(VARCHAR(128), comment='ID на ЕПГУ')
+    id_status = Column(Integer, nullable=False, comment='Внешний ключ на ApplicationStatusList, переходы хранятся в ApplicationStatusTransitionList')
+    date_add = Column(DateTime, nullable=False, server_default=text("sysdate "), comment='Дата добавления в очередь')
+    is_processed = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0 "), comment='Обработан ли, при ошибке -1')
+    date_process = Column(DateTime, comment='Дата обработки')
+    err_msg = Column(VARCHAR(4000), comment='Cообщение об ошибке')
+    epgu_application_id = Column(VARCHAR(40), comment='Идентификатор заявления ЕПГУ')
+    agree = Column(NUMBER(asdecimal=True), nullable=False, server_default=text("0"), comment='Согласие: 1 – подано, 0 - нет')
+    agree_date = Column(DateTime(timezone=True), comment='Дата согласия / Дата отзыва согласия')
 
 
 class SsDocumenttype(Base):
@@ -1128,13 +1127,13 @@ t_tvw_ss_entrancetest_2022 = Table(
 t_vw_ss_entrancetestlocation = Table(
     'vw$ss_entrancetestlocation', metadata,
     Column('Uid', VARCHAR(80)),
-    Column('uidentrancetest', NUMBER(asdecimal=False)),
+    Column('uidentrancetest', NUMBER(asdecimal=True)),
     Column('testdatestart', VARCHAR(532)),
     Column('testdateend', VARCHAR(28)),
     Column('testlocation', VARCHAR(36)),
-    Column('VisibleEpgu', NUMBER(asdecimal=False)),
+    Column('VisibleEpgu', NUMBER(asdecimal=True)),
     Column('Url', CHAR(27)),
-    Column('entrantscount', NUMBER(asdecimal=False)),
+    Column('entrantscount', NUMBER(asdecimal=True)),
     Column('completingentrydate', CHAR(25)),
     schema='abituser'
 )

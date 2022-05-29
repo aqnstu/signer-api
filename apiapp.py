@@ -507,3 +507,17 @@ def create_record_epgu_target_contract(doc: model.EpguTargetContract, db: Sessio
         data = None
         raise HTTPException(status_code=500, detail="DB error")
     return data
+
+
+@app.get("/api/db/get-statuses-to")
+def read_statuses_to(skip: int = 0, limit: int = 5000, db: Session = Depends(get_db)):
+    data = crud.get_statuses_to(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/update-statuses-to")
+def update_record_statuses_to(stat: model.Status, db: Session = Depends(get_db)):
+    crud.update_into_statuses_to(
+        db, pk=stat.pk, is_processed=stat.is_processed, err_msg=stat.err_msg
+    )
+    return {"status": "OK"}
