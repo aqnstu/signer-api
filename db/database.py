@@ -10,6 +10,7 @@ from datetime import datetime
 from configs.db import DB, DB_DECANAT
 from utils.sendemail import NSTUSender
 import pandas as pd
+import logging
 
 SQLALCHEMY_DATABASE_URL = f"{DB['name']}+{DB['driver']}://{DB['username']}:{DB['password']}@{DB['host']}:{DB['port']}/{DB['section']}"
 DECANATUSER_URL = f"{DB['name']}+{DB['driver']}://{DB_DECANAT['username']}:{DB_DECANAT['password']}@{DB['host']}:{DB['port']}/{DB['section']}"
@@ -107,6 +108,28 @@ def send_xlsx(stored_proc: str, filter_str: str, params: str, columns: str, user
     sender = NSTUSender.get_default_sender()
     sender.send("", "", 'noreply@corp.nstu.ru', email, ['output.xlsx'])
 
+
+def load_assets(file_path: str):
+    """
+    :param file_path: путь к файлу
+    :return:
+    """
+    logging.info('starting')
+    cols_src = ['Инвентарный номер', 'Дата принятия к учету', 'Срок полезного использования', 'МОЛ',
+                'ЦМО.Место хранения', 'Дата ввода в эксплуатацию', 'Счет', 'Основное средство', 'Основное средство.Код',
+                'Балансовая стоимость', 'Количество', 'Сумма амортизации', 'Остаточная стоимость']
+
+    cols_res = ['INVENTORY_NUMBER', 'DATE_COMING', 'USED_MONTH', 'FIN_RESP_PERSON',
+                'DEPARTMENT', 'DATE_COMISSIONING', 'ACCOUNT', 'NAME', 'CODE',
+                'CARRYING_VALUE', 'COUNT', 'AMORTIZATION', 'RESIDUAL_VALUE']
+    assets = pd.read_excel(file_path, header=3, usecols=cols_src)
+    logging.info('finishing read')
+    print(assets)
+    assets.rename(columns={cols_src[i]: cols_res[i] for i in range(len(cols_src))}, inplace=True)
+    logging.info('finishing rename')
+    print(assets)
+    assets.to_sql('assets', con=engine_decanat, if_exists='append', chunksize=10, index=False, dtype=String())
+    logging.info('finishing load')
 
 if __name__ == "__main__":
     send_xlsx('decanatuser.OTDEL2.get_facultet_list',
