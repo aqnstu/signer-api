@@ -3,22 +3,87 @@ import sqlalchemy.engine
 import cx_Oracle
 import re
 import json
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Table, Column, Integer, Date, String, Numeric, text, insert, select
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
-from configs.db import DB, DB_DECANAT
+from configs.db import DB, DB_DECANAT, DB_SANDBOX, DB_TEZIS
 from utils.sendemail import NSTUSender
 import pandas as pd
 import logging
 
 SQLALCHEMY_DATABASE_URL = f"{DB['name']}+{DB['driver']}://{DB['username']}:{DB['password']}@{DB['host']}:{DB['port']}/{DB['section']}"
 DECANATUSER_URL = f"{DB['name']}+{DB['driver']}://{DB_DECANAT['username']}:{DB_DECANAT['password']}@{DB['host']}:{DB['port']}/{DB['section']}"
+SANDBOX_URL = f"{DB_SANDBOX['name']}://{DB_SANDBOX['username']}:{DB_SANDBOX['password']}@{DB_SANDBOX['host']}:{DB_SANDBOX['port']}/{DB_SANDBOX['section']}"
+TEZIS_URL = f"{DB_TEZIS['name']}://{DB_TEZIS['username']}:{DB_TEZIS['password']}@{DB_TEZIS['host']}:{DB_TEZIS['port']}/{DB_TEZIS['section']}"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=False)
 engine_decanat = create_engine(DECANATUSER_URL, echo=False)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine_sandbox = create_engine(SANDBOX_URL, echo=False)
+engine_tezis = create_engine(TEZIS_URL, echo=False)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine_decanat)
+SessionSandbox = sessionmaker(autocommit=False, autoflush=False, bind=engine_sandbox)
+SessionTezis = sessionmaker(autocommit=False, autoflush=False, bind=engine_tezis)
 Base = declarative_base()
+metadata = Base.metadata
+
+t_priority_on_date = Table(
+    'priority_on_date', metadata,
+    Column('years', Integer),
+    Column('on_date', Date),
+    Column('name', String(2000)),
+    Column('vals', Numeric),
+    Column('fk_indicator', Integer),
+    Column('descr', String(100)),
+    schema='metabase'
+)
+
+src_t_priority_on_date = Table(
+    'vw$priority_indicator_on_date', metadata,
+    Column('years', Integer),
+    Column('on_date', Date),
+    Column('name', String(2000)),
+    Column('vals', Numeric),
+    Column('fk_indicator', Integer),
+    Column('descr', String(100)),
+    schema='metauser'
+)
+
+t_priority_results = Table(
+    'priority_results', metadata,
+    Column('years', Integer),
+    Column('fk_indicator', Integer),
+    Column('name', String(1000)),
+    Column('vals', Numeric),
+    Column('descr', String(1000)),
+    schema='metabase'
+)
+
+
+src_t_priority_results = Table(
+    'vw$priority_indicator_result', metadata,
+    Column('years', Integer),
+    Column('fk_indicator', Integer),
+    Column('name', String(1000)),
+    Column('vals', Numeric),
+    Column('descr', String(1000)),
+    schema='metauser'
+)
+
+TABS = {'priority_on_date': (t_priority_on_date, src_t_priority_on_date),
+        'priority_results': (t_priority_results, src_t_priority_results)}
+
+
+class OracleView(Base):
+    __tablename__ = 'oracle_views'
+    __table_args__ = {'schema': 'metabase'}
+
+    id = Column(Integer, primary_key=True, server_default=text("nextval('metabase.oracle_views_id_seq'::regclass)"))
+    user_name = Column(String(100))
+    view_name = Column(String(100))
+    to_load = Column(Integer, nullable=False, server_default=text("1"))
+    table_name = Column(String(100), nullable=False)
+
 
 
 def get_raw_connection():
@@ -131,9 +196,24 @@ def load_assets(file_path: str):
     assets.to_sql('assets', con=engine_decanat, if_exists='append', chunksize=10, index=False, dtype=String())
     logging.info('finishing load')
 
+
+def sync_all():
+    """
+    Получение данных из песочницы
+    :return:
+    """
+    sess_decanat = SessionLocal()
+    sess_tezis = SessionTezis()
+    conn_tezis = sess_tezis.bind.connect()
+    for i in sess_tezis.query(OracleView).filter(OracleView.to_load == 1).all():
+        src_table = TABS[i.table_name][1]
+        dest_table = TABS[i.table_name][0]
+        del_stmt = dest_table.delete()
+        ins_stmt = dest_table.insert()
+        res = sess_decanat.bind.execute(select([src_table]))
+        conn_tezis.execute(del_stmt)
+        conn_tezis.execute(ins_stmt, [i._mapping for i in res])
+
+
 if __name__ == "__main__":
-    send_xlsx('decanatuser.OTDEL2.get_facultet_list',
-              "SHORTNAME = *Д* and PK>6",
-              "",
-              '[{"FIELD": "SHORTNAME", "CAPTION": "Факультет"}, {"FIELD": "PK", "CAPTION": "Ид"}]',
-              2, 1)
+    sync_all()

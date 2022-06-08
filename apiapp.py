@@ -7,7 +7,7 @@ from typing import Dict
 
 from configs.sentry import SENTRY
 from db import crud
-from db.database import SessionLocal, send_xlsx
+from db.database import SessionLocal, send_xlsx, sync_all
 from logger import CustomizeLogger
 import model
 from sms.sms import get_balance, get_number_available, send_sms, get_sms_state
@@ -211,6 +211,20 @@ def get_send_xlsx(stored_proc: str, filter_str: str, params: str, columns: str, 
     :param sid: ид сессии
     :return:
     """
+    # вызываем хранимую процедуру с параметрами
+    # генерируем excel файл
+    # получаем адрес электронной почты
+    # отправляем файл на этот адрес
+    send_xlsx(stored_proc, filter_str, params, columns, userid, sid)
+
+
+@app.get("/sync_to_metabase")
+def sync_to_metabase():
+    """
+    синхронизация данных для metabase
+    :return:
+    """
+    sync_all()
     # вызываем хранимую процедуру с параметрами
     # генерируем excel файл
     # получаем адрес электронной почты
