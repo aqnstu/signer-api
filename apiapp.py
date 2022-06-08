@@ -225,11 +225,6 @@ def sync_to_metabase():
     :return:
     """
     sync_all()
-    # вызываем хранимую процедуру с параметрами
-    # генерируем excel файл
-    # получаем адрес электронной почты
-    # отправляем файл на этот адрес
-    send_xlsx(stored_proc, filter_str, params, columns, userid, sid)
 
 
 # @app.get("/api/db/get-entrance-test-location")
