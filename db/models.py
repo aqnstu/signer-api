@@ -1052,6 +1052,7 @@ t_vw_ss_competitivegroup_2022 = Table(
     Column('comment', VARCHAR(522)),
     Column('idstage', NUMBER(asdecimal=True)),
     Column('fk_competition', NUMBER(asdecimal=True)),
+    Column('specialquota', NUMBER(asdecimal=True)),
     schema='abituser'
 )
 

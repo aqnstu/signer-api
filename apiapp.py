@@ -48,9 +48,7 @@ def root() -> Dict[str, str]:
     """
     Домашняя страница :)
     """
-    return {
-        "message": "API для прочих нужд. Документация по пути: /docs или /redoc"
-    }
+    return {"message": "API для прочих нужд. Документация по пути: /docs или /redoc"}
 
 
 @app.post("/api/utils/create-base64")
@@ -68,17 +66,13 @@ def create_jwt(doc: model.Document) -> Dict[str, str]:
 
 
 @app.get("/api/db/get-org-direction")
-def read_org_direction(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_org_direction(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     data = crud.get_org_direction(db, skip=skip, limit=limit)
     return data
 
 
 @app.get("/api/db/get-campaign")
-def read_campaign(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_campaign(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     data = crud.get_campaign(db, skip=skip, limit=limit)
     return data
 
@@ -137,7 +131,7 @@ def read_entrance_test(
 
 @app.get("/api/db/get-entrance-test-location")
 def read_entrance_test_location(
-    skip: int = 0, limit: int = 5000, db: Session = Depends(get_db)
+    skip: int = 0, limit: int = 1000000, db: Session = Depends(get_db)
 ):
     data = crud.get_entrance_test_location(db, skip=skip, limit=limit)
     return data
@@ -183,7 +177,9 @@ def send_sms_to_phone(phone: str, text: str):
     Отправить сообщение адресату ("GET" API).
     """
     data = send_sms(phone, text)
-    data_parsed = str(data.get("id_sms")) if data.get("id_sms", False) else data.get("msg")
+    data_parsed = (
+        str(data.get("id_sms")) if data.get("id_sms", False) else data.get("msg")
+    )
 
     return data_parsed
 
@@ -200,7 +196,9 @@ def get_sms_state_by_id(id_sms: int):
 
 
 @app.get("/send_xlsx")
-def get_send_xlsx(stored_proc: str, filter_str: str, params: str, columns: str, userid: int, sid: int):
+def get_send_xlsx(
+    stored_proc: str, filter_str: str, params: str, columns: str, userid: int, sid: int
+):
     """
     выгрузка хранимой процедуры в excel и отправка на почту
     :param stored_proc: хранимая процедура
@@ -227,118 +225,8 @@ def sync_to_metabase():
     sync_all()
 
 
-# @app.get("/api/db/get-entrance-test-location")
-# def read_entrance_test_location(
-#     skip: int = 0, limit: int = 5000, db: Session = Depends(get_db)
-# ):
-#     data = crud.get_entrance_test_location(db, skip=skip, limit=limit)
-#     return data
-
-
-# @app.get("/api/db/get-epgu-application")
-# def read_epgu_application(
-#     skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-# ):
-#     data = crud.get_epgu_application(db, skip=skip, limit=limit)
-#     return data
-
-
-# @app.post("/api/db/insert-into-epgu-application")
-# def create_record_epgu_application(app: Application, db: Session = Depends(get_db)):
-#     return crud.insert_into_epgu_application(
-#         db=db,
-#         user_guid=app.user_guid,
-#         id_jwt_epgu=app.id_jwt_epgu,
-#         appnumber=app.appnumber,
-#         json_data=app.json_data,
-#         id_datatype=app.id_datatype,
-#     )
-
-
-# @app.get("/api/db/get-statuses-to")
-# def read_statuses_to(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-#     data = crud.get_statuses_to(db, skip=skip, limit=limit)
-#     return data
-
-
-# @app.post("/api/db/update-statuses-to")
-# def update_record_statuses_to(stat: Status, db: Session = Depends(get_db)):
-#     data = crud.update_into_statuses_to(
-#         db, pk=stat.pk, is_processed=stat.is_processed, err_msg=stat.err_msg
-#     )
-#     return {"status": "OK"}
-
-
-# @app.get("/api/db/get-epgu-document")
-# def read_epgu_document(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-#     data = crud.get_epgu_document(db, skip=skip, limit=limit)
-#     return data
-
-
-# @app.post("/api/db/insert-into-epgu-document")
-# def create_record_epgu_document(doc: EpguDocument, db: Session = Depends(get_db)):
-#     try:
-#         data = crud.insert_into_epgu_document(
-#             db,
-#             user_guid=doc.user_guid,
-#             appnumber=doc.appnumber,
-#             id_jwt_epgu=doc.id_jwt_epgu,
-#             json_data=doc.json_data,
-#             id_documenttype=doc.id_documenttype,
-#         )
-#     except Exception as e:
-#         app.logger.error(e)
-#         data = None
-#         raise HTTPException(status_code=500, detail="DB error")
-#     return data
-
-
-# @app.get("/api/db/get-epgu-achievement")
-# def read_epgu_achievement(
-#     skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-# ):
-#     data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
-#     return data
-
-
-# @app.post("/api/db/insert-into-epgu-achievement")
-# def create_record_epgu_achievement(ach: EpguAchievement, db: Session = Depends(get_db)):
-#     try:
-#         data = crud.insert_into_epgu_achievement(
-#             db,
-#             user_guid=ach.user_guid,
-#             appnumber=ach.appnumber,
-#             id_jwt_epgu=ach.id_jwt_epgu,
-#             json_data=ach.json_data,
-#             id_category=ach.id_category,
-#         )
-#     except Exception as e:
-#         app.logger.error(e)
-#         data = None
-#         raise HTTPException(status_code=500, detail="DB error")
-#     return data
-
-
-# @app.get("/api/db/get-competitive-group-applications-list")
-# def read_competitive_group_applications_list(
-#     competitive_group: int = None,
-#     skip: int = 0,
-#     limit: int = 40000,
-#     db: Session = Depends(get_db),
-# ):
-#     data = crud.get_competitive_group_applications_list(
-#         db, competitive_group=competitive_group, skip=skip, limit=limit
-#     )
-#     return data
-
-
-"""#############2022##############"""
-
-
 @app.get("/api/db/get-epgu-jwt")
-def read_epgu_jwt(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_epgu_jwt(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     data = crud.get_epgu_jwt(db, skip=skip, limit=limit)
     return data
 
@@ -370,7 +258,9 @@ def read_epgu_achievement(
 
 
 @app.post("/api/db/insert-into-epgu-achievement")
-def create_record_epgu_achievement(doc: model.EpguAchievement, db: Session = Depends(get_db)):
+def create_record_epgu_achievement(
+    doc: model.EpguAchievement, db: Session = Depends(get_db)
+):
     try:
         data = crud.insert_into_epgu_achievement(
             db,
@@ -379,7 +269,7 @@ def create_record_epgu_achievement(doc: model.EpguAchievement, db: Session = Dep
             data_json=doc.data_json,
             app_number=doc.app_number,
             uid_epgu=doc.uid_epgu,
-            id_category=doc.id_category
+            id_category=doc.id_category,
         )
     except Exception as e:
         app.logger.error(e)
@@ -389,9 +279,7 @@ def create_record_epgu_achievement(doc: model.EpguAchievement, db: Session = Dep
 
 
 @app.get("/api/db/get-epgu-benefit")
-def read_epgu_benefit(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_epgu_benefit(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     data = crud.get_epgu_achievement(db, skip=skip, limit=limit)
     return data
 
@@ -406,7 +294,7 @@ def create_record_epgu_benefit(doc: model.EpguBenefit, db: Session = Depends(get
             data_json=doc.data_json,
             app_number=doc.app_number,
             uid_epgu=doc.uid_epgu,
-            id_benefit=doc.id_benefit
+            id_benefit=doc.id_benefit,
         )
     except Exception as e:
         app.logger.error(e)
@@ -416,9 +304,7 @@ def create_record_epgu_benefit(doc: model.EpguBenefit, db: Session = Depends(get
 
 
 @app.get("/api/db/get-epgu-doc")
-def read_epgu_doc(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_epgu_doc(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     data = crud.get_epgu_doc(db, skip=skip, limit=limit)
     return data
 
@@ -432,7 +318,7 @@ def create_record_epgu_doc(doc: model.EpguDoc, db: Session = Depends(get_db)):
             data_json=doc.data_json,
             user_guid=doc.user_guid,
             uid_epgu=doc.uid_epgu,
-            id_document_version=doc.id_document_version
+            id_document_version=doc.id_document_version,
         )
     except Exception as e:
         app.logger.error(e)
@@ -450,7 +336,9 @@ def read_epgu_identification(
 
 
 @app.post("/api/db/insert-into-epgu-identification")
-def create_record_epgu_identification(doc: model.EpguIdentification, db: Session = Depends(get_db)):
+def create_record_epgu_identification(
+    doc: model.EpguIdentification, db: Session = Depends(get_db)
+):
     try:
         data = crud.insert_into_epgu_identification(
             db,
@@ -458,7 +346,7 @@ def create_record_epgu_identification(doc: model.EpguIdentification, db: Session
             data_json=doc.data_json,
             user_guid=doc.user_guid,
             uid_epgu=doc.uid_epgu,
-            id_document_type=doc.id_document_type
+            id_document_type=doc.id_document_type,
         )
     except Exception as e:
         app.logger.error(e)
@@ -468,9 +356,7 @@ def create_record_epgu_identification(doc: model.EpguIdentification, db: Session
 
 
 @app.get("/api/db/get-epgu-photo")
-def read_epgu_photo(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
-):
+def read_epgu_photo(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     data = crud.get_epgu_photo(db, skip=skip, limit=limit)
     return data
 
@@ -501,7 +387,9 @@ def read_epgu_target_organization(
 
 
 @app.post("/api/db/insert-into-epgu-target-contract")
-def create_record_epgu_target_contract(doc: model.EpguTargetContract, db: Session = Depends(get_db)):
+def create_record_epgu_target_contract(
+    doc: model.EpguTargetContract, db: Session = Depends(get_db)
+):
     try:
         data = crud.insert_into_epgu_target_contract(
             db,
@@ -509,7 +397,7 @@ def create_record_epgu_target_contract(doc: model.EpguTargetContract, db: Sessio
             data_json=doc.data_json,
             user_guid=doc.user_guid,
             uid_epgu=doc.uid_epgu,
-            uid_target_organization=doc.uid_target_organization
+            uid_target_organization=doc.uid_target_organization,
         )
     except Exception as e:
         app.logger.error(e)
@@ -530,3 +418,8 @@ def update_record_statuses_to(stat: model.Status, db: Session = Depends(get_db))
         db, pk=stat.pk, is_processed=stat.is_processed, err_msg=stat.err_msg
     )
     return {"status": "OK"}
+
+
+@app.get("/api/db/get-table-by-name")
+def read_table_from_db(name: str, field_name: str = '', field_value: str = '', db: Session = Depends(get_db)):
+    return crud.get_table_by_name(db, name, field_name, field_value)
