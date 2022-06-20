@@ -423,3 +423,35 @@ def update_record_statuses_to(stat: model.Status, db: Session = Depends(get_db))
 @app.get("/api/db/get-table-by-name")
 def read_table_from_db(name: str, field_name: str = '', field_value: str = '', db: Session = Depends(get_db)):
     return crud.get_table_by_name(db, name, field_name, field_value)
+
+
+@app.get("/api/db/get-ss-application-out-error")
+def read_ss_application_out_error(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    data = crud.get_ss_application_out_error(db, skip=skip, limit=limit)
+    return data
+
+
+@app.post("/api/db/insert-into-ss-application-out-error")
+def create_record_ss_application_out_error(
+    doc: model.SsApplicationOutError,
+    db: Session = Depends(get_db)
+):
+    try:
+        data = crud.insert_into_ss_application_out_error(
+            db,
+            uid=doc.uid,
+            guid=doc.guid,
+            uididentification=doc.uididentification,
+            uideducation=doc.uideducation,
+            issuccess=doc.issuccess,
+            msg=doc.msg,
+        )
+    except Exception as e:
+        app.logger.error(e)
+        data = None
+        raise HTTPException(status_code=500, detail="DB error")
+    return data

@@ -426,3 +426,51 @@ def get_table_by_name(db: Session, table: str, field_name: str = '', field_value
     query = f"SELECT * FROM abituser.{table}"
     where = "" if not field_name or not field_value else f" where {field_name} = {field_value}"
     return db.execute(query + where).fetchall()
+
+
+def get_ss_application_out_error(db: Session, skip: int = 0, limit: int = 10000):
+    return (
+        db.query(models.SsApplicationOutError)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+
+def insert_into_ss_application_out_error(
+    db: Session,
+    uid: str,
+    guid: str,
+    uididentification: str,
+    uideducation: str,
+    issuccess: int,
+    msg: int
+):
+    if (
+        not db.query(models.SsApplicationOutError)
+        .filter(
+            models.SsApplicationOutError.uid == uid,
+        )
+        .one_or_none()
+    ):
+        row = models.SsApplicationOutError(
+            uid=uid,
+            guid=guid,
+            uididentification=uididentification,
+            uideducation=uideducation,
+            issuccess=issuccess,
+            msg=msg,
+        )
+        db.add(row)
+    else:
+        db.query(models.SsApplicationOutError).filter(
+            models.SsApplicationOutError.uid == uid,
+        ).update({
+            models.SsApplicationOutError.guid: guid,
+            models.SsApplicationOutError.uididentification: uididentification,
+            models.SsApplicationOutError.uideducation: uideducation,
+            models.SsApplicationOutError.issuccess: issuccess,
+            models.SsApplicationOutError.msg: msg,
+        })
+
+    db.commit()

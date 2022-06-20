@@ -77,6 +77,15 @@ class EpguTargetContract(BaseModel):
     uid_target_organization: str
 
 
+class SsApplicationOutError(BaseModel):
+    uid: str
+    guid: Optional[str]
+    uididentification: Optional[str]
+    uideducation: Optional[str]
+    issuccess: int
+    msg: Optional[str]
+
+
 class Status(BaseModel):
     pk: int
     is_processed: int

@@ -1281,3 +1281,18 @@ class SsoBenefit(Base):
     id_benefit = Column(Integer, comment='Идентификатор записи справочника BenefitList')
 
     sso_jwt_epgu = relationship('SsoJwtEpgu')
+
+
+class SsApplicationOutError(Base):
+    __tablename__ = 'ss_application_out'
+    __table_args__ = {'schema': 'abituser', 'comment': 'Статус выгрузки заявлений в ССПВО'}
+
+    uid = Column(VARCHAR(15), primary_key=True, comment='UID заявления')
+    guid = Column(VARCHAR(50), comment='Guid абитуриента с ЕПГУ')
+    uididentification = Column(VARCHAR(50), comment='UID ДУЛ (вероятно он уже есть на ЕПГУ)')
+    uideducation = Column(VARCHAR(15), comment='UID документа об образовании')
+    issuccess = Column(NUMBER(1, 0, False))
+    msg = Column(Text)
+    added = Column(TIMESTAMP, server_default=text("""\
+sysdate
+"""))
