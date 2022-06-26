@@ -24,8 +24,8 @@ class EpguJwt(BaseModel):
     id: int
     id_datatype: int
     data_json: str
-    user_guid: str
-    app_number: str
+    user_guid: Optional[str]
+    app_number: Optional[str]
 
 
 class EpguAchievement(BaseModel):
