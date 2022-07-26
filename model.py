@@ -95,3 +95,85 @@ class Status(BaseModel):
 class MinioPath(BaseModel):
     bucket_name: str
     id_minio: str
+
+
+class SsoLkDatum(BaseModel):
+    agree: Optional[str]
+    agree_date: Optional[str]
+    app_number: str
+    changed: str
+    code_status: str
+    comment: str
+    created: str
+    education_form: str
+    education_level: str
+    education_source: str
+    entrant_fullname: str
+    entrant_snils: str
+    id: int
+    id_campaign: int
+    id_competitive_group: int
+    id_status: int
+    name_status: str
+    need_hostel: str
+    registration_date: str
+    uid: str
+    uid_epgu: str
+
+
+class SsoResultsTo(BaseModel):
+    err_msg: Optional[str]
+    pk: int
+    processed: int
+
+
+
+
+class SetCompetition(BaseModel): #epgu_ss_pkg.set_competition
+    fk_abit_card: int
+    fk_competition: int
+    egpu_id: int
+    id_jwt: int
+    fk_abit_competition: int
+    comp_uid: str
+    guid: str
+
+class UpdateEducData(BaseModel):#epgu_ss_pkg.update_educ_data
+    fk_abit_card: int
+    serial: str
+    number: str
+    org: str
+    date: str
+    d_type: int
+    is_checked: int
+
+class SetCard(BaseModel):#ac_pkg.set_card
+    pk: int
+    fk_student: int
+    tabnum: int
+    family_name: str
+    name: str
+    patronymic_name: str
+    birthday: str
+    sex: int
+    year_education: int
+    school: str
+    ed_document_serial: str
+    ed_document_number: str
+    in_date_education: int
+    ATT_FAMILY: str
+    h_n_e: int
+    accept_date: str
+    passport_who_distribute: str
+    passport_date_distribute: str
+    pasport_number: str
+    pasport_serial: str
+    kod_podr: str
+    place_of_birth: str
+    enrolment_address: str
+    enrolment_address_code: str
+    enrolment_address_phone: str
+    EMAIL: str
+    MOBILE_PHONE: str
+    insurance_num: str
+    date_educ: str

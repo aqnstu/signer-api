@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import select
+import json
+
 from sqlalchemy.orm import Session
 
+import model
 from . import models
 
 
@@ -50,7 +52,7 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
             )
             .order_by(
                 models.t_tvw_ss_entrancetest_2022.c.uidcompetitivegroup,
-                models.t_tvw_ss_entrancetest_2022.c.priority,
+                models.t_tvw_ss_entrancetest_2022.c.priority
             )
             .offset(skip)
             .limit(limit)
@@ -65,7 +67,7 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
             )
             .order_by(
                 models.t_tvw_ss_entrancetest_2022.c.uidcompetitivegroup,
-                models.t_tvw_ss_entrancetest_2022.c.priority,
+                models.t_tvw_ss_entrancetest_2022.c.priority
             )
             .offset(skip)
             .limit(limit)
@@ -74,10 +76,12 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
     if stage == 3:
         return (
             db.query(models.t_tvw_ss_entrancetest_2022)
-            .filter(models.t_tvw_ss_entrancetest_2022.c.isege == 0)
+            .filter(
+                models.t_tvw_ss_entrancetest_2022.c.isege == 0
+            )
             .order_by(
                 models.t_tvw_ss_entrancetest_2022.c.uidcompetitivegroup,
-                models.t_tvw_ss_entrancetest_2022.c.priority,
+                models.t_tvw_ss_entrancetest_2022.c.priority
             )
             .offset(skip)
             .limit(limit)
@@ -85,7 +89,7 @@ def get_entrance_test(db: Session, skip: int = 0, limit: int = 5000, stage: int 
         )
 
 
-def get_entrance_test_location(db: Session, skip: int = 0, limit: int = 500000):
+def get_entrance_test_location(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.t_vw_ss_entrancetestlocation).offset(skip).limit(limit).all()
 
 
@@ -137,6 +141,9 @@ def get_competitive_group_applications_list(
         )
 
 
+"""#############2022##############"""
+
+
 def get_epgu_jwt(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.SsoJwtEpgu).offset(skip).limit(limit).all()
 
@@ -149,27 +156,28 @@ def insert_into_epgu_jwt(
     user_guid: str,
     app_number: str,
 ):
-    if (
-        not db.query(models.SsoJwtEpgu)
-        .filter(
-            models.SsoJwtEpgu.user_guid == user_guid,
-            models.SsoJwtEpgu.app_number == app_number,
-        )
-        .one_or_none()
-    ):
-        row = models.SsoJwtEpgu(
-            id=id,
-            id_datatype=id_datatype,
-            data_json=data_json,
-            user_guid=user_guid,
-            app_number=app_number,
-        )
-        db.add(row)
-    else:
-        db.query(models.SsoJwtEpgu).filter(
-            models.SsoJwtEpgu.user_guid == user_guid,
-            models.SsoJwtEpgu.app_number == app_number,
-        ).update({models.SsoJwtEpgu.data_json: data_json})
+    # if (
+    #     not db.query(models.SsoJwtEpgu)
+    #     .filter(
+    #         models.SsoJwtEpgu.user_guid == user_guid,
+    #         models.SsoJwtEpgu.app_number == app_number,
+    #     )
+    #     .one_or_none()
+    # ):
+    row = models.SsoJwtEpgu(
+        id=id,
+        id_datatype=id_datatype,
+        data_json=data_json,
+        user_guid=user_guid,
+        app_number=app_number,
+    )
+    db.add(row)
+    # else:
+    #     db.query(models.SsoJwtEpgu).filter(
+    #         models.SsoJwtEpgu.user_guid == user_guid,
+    #         models.SsoJwtEpgu.app_number == app_number,
+    #     ).update({models.SsoJwtEpgu.data_json: data_json})
+
     db.commit()
 
 
@@ -186,28 +194,29 @@ def insert_into_epgu_achievement(
     uid_epgu: int,
     id_category: int,
 ):
-    if (
-        not db.query(models.SsoAchievement)
-        .filter(
-            models.SsoAchievement.app_number == app_number,
-            models.SsoAchievement.uid_epgu == uid_epgu,
-        )
-        .one_or_none()
-    ):
-        row = models.SsoAchievement(
-            id=id,
-            id_jwt_epgu=id_jwt_epgu,
-            data_json=data_json,
-            app_number=app_number,
-            uid_epgu=uid_epgu,
-            id_category=id_category,
-        )
-        db.add(row)
-    else:
-        db.query(models.SsoAchievement).filter(
-            models.SsoAchievement.app_number == app_number,
-            models.SsoAchievement.uid_epgu == uid_epgu,
-        ).update({models.SsoAchievement.data_json: data_json})
+    # if (
+    #     not db.query(models.SsoAchievement)
+    #     .filter(
+    #         models.SsoAchievement.app_number == app_number,
+    #         models.SsoAchievement.uid_epgu == uid_epgu,
+    #     )
+    #     .one_or_none()
+    # ):
+    row = models.SsoAchievement(
+        id=id,
+        id_jwt_epgu=id_jwt_epgu,
+        data_json=data_json,
+        app_number=app_number,
+        uid_epgu=uid_epgu,
+        id_category=id_category,
+    )
+    db.add(row)
+    # else:
+    #     db.query(models.SsoAchievement).filter(
+    #         models.SsoAchievement.app_number == app_number,
+    #         models.SsoAchievement.uid_epgu == uid_epgu,
+    #     ).update({models.SsoAchievement.data_json: data_json})
+
     db.commit()
 
 
@@ -224,28 +233,28 @@ def insert_into_epgu_benefit(
     uid_epgu: int,
     id_benefit: int,
 ):
-    if (
-        not db.query(models.SsoBenefit)
-        .filter(
-            models.SsoBenefit.app_number == app_number,
-            models.SsoBenefit.uid_epgu == uid_epgu,
-        )
-        .one_or_none()
-    ):
-        row = models.SsoBenefit(
-            id=id,
-            id_jwt_epgu=id_jwt_epgu,
-            data_json=data_json,
-            app_number=app_number,
-            uid_epgu=uid_epgu,
-            id_benefit=id_benefit,
-        )
-        db.add(row)
-    else:
-        db.query(models.SsoBenefit).filter(
-            models.SsoBenefit.app_number == app_number,
-            models.SsoBenefit.uid_epgu == uid_epgu,
-        ).update({models.SsoBenefit.data_json: data_json})
+    # if (
+    #     not db.query(models.SsoBenefit)
+    #     .filter(
+    #         models.SsoBenefit.app_number == app_number,
+    #         models.SsoBenefit.uid_epgu == uid_epgu,
+    #     )
+    #     .one_or_none()
+    # ):
+    row = models.SsoBenefit(
+        id=id,
+        id_jwt_epgu=id_jwt_epgu,
+        data_json=data_json,
+        app_number=app_number,
+        uid_epgu=uid_epgu,
+        id_benefit=id_benefit,
+    )
+    db.add(row)
+    # else:
+    #     db.query(models.SsoBenefit).filter(
+    #         models.SsoBenefit.app_number == app_number,
+    #         models.SsoBenefit.uid_epgu == uid_epgu,
+    #     ).update({models.SsoBenefit.data_json: data_json})
 
     db.commit()
 
@@ -406,6 +415,12 @@ def get_statuses_to(db: Session, skip: int = 0, limit: int = 5000):
     )
 
 
+def get_appl_for_test(db: Session, skip: int = 0, limit: int = 5000):
+    return (
+        db.query(models.SsoJwtEpguForTest).all()
+    )
+
+
 def update_into_statuses_to(
     db: Session, pk: int, is_processed: int, err_msg: str = None
 ):
@@ -424,7 +439,7 @@ def get_table_by_name(db: Session, table: str, field_name: str = '', field_value
         return {"msg": "bad params"}
 
     query = f"SELECT * FROM abituser.{table}"
-    where = "" if not field_name or not field_value else f" where {field_name} = {field_value}"
+    where = "" if not field_name or not field_value else f' where "{field_name}" = {field_value}'
     return db.execute(query + where).fetchall()
 
 
@@ -472,5 +487,40 @@ def insert_into_ss_application_out_error(
             models.SsApplicationOutError.issuccess: issuccess,
             models.SsApplicationOutError.msg: msg,
         })
+
+    db.commit()
+
+
+def insert_into_sso_lk_data(
+        db: Session,
+        doc: model.SsoLkDatum):
+    db.query(
+        models.SsoLkDatum
+    ).filter(
+        models.SsoLkDatum.app_number == doc.app_number
+    ).update({
+        'is_actual': 0
+    })
+
+    row = models.SsoLkDatum(**vars(doc))
+    db.add(row)
+
+    db.commit()
+
+
+def set_uploaded_results(
+        db: Session,
+        pk: int,
+        processed: int,
+        err_msg: str
+):
+    db.query(
+        models.SsResultsTo
+    ).filter(
+        models.SsResultsTo.pk == pk
+    ).update({
+        'is_processed': processed,
+        'err_msg': err_msg
+    })
 
     db.commit()

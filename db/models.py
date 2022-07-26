@@ -1052,7 +1052,6 @@ t_vw_ss_competitivegroup_2022 = Table(
     Column('comment', VARCHAR(522)),
     Column('idstage', NUMBER(asdecimal=True)),
     Column('fk_competition', NUMBER(asdecimal=True)),
-    Column('specialquota', NUMBER(asdecimal=True)),
     schema='abituser'
 )
 
@@ -1283,6 +1282,21 @@ class SsoBenefit(Base):
     sso_jwt_epgu = relationship('SsoJwtEpgu')
 
 
+class SsoJwtEpguForTest(Base):
+    """
+    Только для тестовых заявлений
+    """
+    __tablename__ = 'vw$sso_jwt_epgu_for_test'
+    __table_args__ = {'schema': 'abituser'}
+
+    id = Column(Integer, primary_key=True)
+    id_datatype = Column(ForeignKey('abituser.sso_epgu_datatype.id'))
+    data_json = Column(Text)
+    date_added = Column(TIMESTAMP, nullable=False, server_default=text("current_timestamp "))
+    user_guid = Column(VARCHAR(40))
+    app_number = Column(VARCHAR(40))
+
+
 class SsApplicationOutError(Base):
     __tablename__ = 'ss_application_out'
     __table_args__ = {'schema': 'abituser', 'comment': 'Статус выгрузки заявлений в ССПВО'}
@@ -1296,3 +1310,50 @@ class SsApplicationOutError(Base):
     added = Column(TIMESTAMP, server_default=text("""\
 sysdate
 """))
+
+
+class SsoLkDatum(Base):
+    __tablename__ = 'sso_lk_data'
+    __table_args__ = {'schema': 'abituser'}
+
+    pk = Column(NUMBER(asdecimal=False), primary_key=True)
+    agree = Column(VARCHAR(1024))
+    agree_date = Column(VARCHAR(1024))
+    app_number = Column(VARCHAR(1024))
+    changed = Column(VARCHAR(1024))
+    code_status = Column(VARCHAR(1024))
+    comment = Column(VARCHAR(1024))
+    created = Column(VARCHAR(1024))
+    education_form = Column(VARCHAR(1024))
+    education_level = Column(VARCHAR(1024))
+    education_source = Column(VARCHAR(1024))
+    entrant_fullname = Column(VARCHAR(1024))
+    entrant_snils = Column(VARCHAR(1024))
+    id = Column(NUMBER(asdecimal=False))
+    id_campaign = Column(NUMBER(asdecimal=False))
+    id_competitive_group = Column(NUMBER(asdecimal=False))
+    id_status = Column(NUMBER(asdecimal=False))
+    name_status = Column(VARCHAR(1024))
+    need_hostel = Column(VARCHAR(1024))
+    registration_date = Column(VARCHAR(1024))
+    uid = Column(VARCHAR(1024))
+    uid_epgu = Column(VARCHAR(1024))
+    dt = Column(DateTime, nullable=False, server_default=text("sysdate "))
+    is_actual = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("1 "))
+
+
+class SsResultsTo(Base):
+    __tablename__ = 'ss_results_to'
+    __table_args__ = {'schema': 'abituser'}
+
+    pk = Column(NUMBER(asdecimal=False), primary_key=True)
+    fk_abit_card = Column(NUMBER(asdecimal=False))
+    fk_competition = Column(NUMBER(asdecimal=False))
+    score = Column(NUMBER(asdecimal=False))
+    test_name = Column(VARCHAR(1024))
+    appnumber = Column(NUMBER(asdecimal=False))
+    id_entrance_test_type = Column(NUMBER(asdecimal=False))
+    added = Column(DateTime, nullable=False, server_default=text("sysdate "))
+    is_processed = Column(NUMBER(asdecimal=False), nullable=False, server_default=text("0"))
+    date_processed = Column(DateTime)
+    err_msg = Column(VARCHAR(1024))

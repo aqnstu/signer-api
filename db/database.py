@@ -70,8 +70,43 @@ src_t_priority_results = Table(
     schema='metauser'
 )
 
+t_priority_nich = Table(
+    'priority_nich', metadata,
+    Column('years', Integer),
+    Column('sp', String(100)),
+    Column('projectname', String(500)),
+    Column('subproject', String(500)),
+    Column('priority_plan', Numeric),
+    Column('plan_prihod', Numeric),
+    Column('paid', Numeric),
+    Column('ostatok_plan', Numeric),
+    Column('ostatok_fakt', Numeric),
+    Column('indikator', String(500)),
+    schema='metabase'
+)
+
+
+src_t_priority_nich = Table(
+    'vw$priority_nich', metadata,
+    Column('years', Integer),
+    Column('sp', String(1000)),
+    Column('projectname', String(1000)),
+    Column('subproject', String(1000)),
+    Column('priority_plan', Numeric),
+    Column('plan_prihod',Numeric),
+    Column('paid', Numeric),
+    Column('ostatok_plan', Numeric),
+    Column('ostatok_fakt', Numeric),
+    Column('indikator', String(500)),
+    schema='metauser'
+)
+
+
+
 TABS = {'priority_on_date': (t_priority_on_date, src_t_priority_on_date),
-        'priority_results': (t_priority_results, src_t_priority_results)}
+        'priority_results': (t_priority_results, src_t_priority_results),
+        'priority_nich': (t_priority_nich, src_t_priority_nich)
+        }
 
 
 class OracleView(Base):
@@ -83,7 +118,6 @@ class OracleView(Base):
     view_name = Column(String(100))
     to_load = Column(Integer, nullable=False, server_default=text("1"))
     table_name = Column(String(100), nullable=False)
-
 
 
 def get_raw_connection():
